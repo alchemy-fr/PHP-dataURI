@@ -54,7 +54,7 @@ class Parser
 
     if ( ! preg_match(self::DATA_URI_REGEXP, $dataUri, $matches))
     {
-      throw new \InvalidArgumentException();
+      throw new \InvalidArgumentException('Could not parse the URL scheme');
     }
 
     $base64 = false;
@@ -81,7 +81,7 @@ class Parser
     
     if (($base64 && ! $rawData = base64_decode($rawData, $strict)))
     {
-      throw new InvalidData();
+      throw new InvalidData('base64 encoding failed');
     }
     
     if(!$base64)

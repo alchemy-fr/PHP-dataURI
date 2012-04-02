@@ -190,7 +190,7 @@ class Data
   {
     if ( ! file_exists($pathfile))
     {
-      throw new FileNotFound();
+      throw new FileNotFound(sprintf('%s file does not exist', $pathfile));
     }
 
     file_put_contents($pathfile, $this->data, $override ? 0 : FILE_APPEND);
@@ -217,7 +217,7 @@ class Data
     
     if ($binaryData && ! $data = base64_encode($data))
     {
-      throw new InvalidData();
+      throw new InvalidData('base64 encoding failed');
     }
     
     if(!$binaryData)
@@ -244,15 +244,15 @@ class Data
   {
     if ($length === self::LITLEN && strlen($this->data) > self::LIT_LIMIT)
     {
-      throw new TooLongData();
+      throw new TooLongData('Too long data', strlen($this->data));
     }
     elseif (strlen($this->data) > self::ATTS_TAG_LIMIT)
     {
-      throw new TooLongData();
+      throw new TooLongData('Too long data', strlen($this->data));
     }
     else
     {
-      throw new \InvalidArgumentException();
+      throw new \InvalidArgumentException('Data length is not valid');
     }
 
     if (null === $this->mimeType)
