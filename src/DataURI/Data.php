@@ -90,7 +90,7 @@ class Data
    * Tell whether data is encoded 
    * @var boolean 
    */
-  protected $base64Encoded = false;
+  protected $binaryData = false;
 
   public function __construct($data, $mimeType = null, Array $parameters = array(), $length = self::TAGLEN)
   {
@@ -132,19 +132,19 @@ class Data
    * Data is base64 encoded
    * @return boolean 
    */
-  public function isBase64Encoded()
+  public function isBinaryData()
   {
-    return $this->base64Encoded;
+    return $this->binaryData;
   }
 
   /**
    * Set if Data is base64 encoded
-   * @param boolean $base64Encoded
+   * @param boolean $binaryData
    * @return \DataURI\Data 
    */
-  public function setBase64Encoded($base64Encoded)
+  public function setBinaryData($binaryData)
   {
-    $this->base64Encoded = $base64Encoded;
+    $this->binaryData = $binaryData;
     return $this;
   }
 
@@ -189,7 +189,7 @@ class Data
    * @param \SplFileInfo $file
    * @return \DataURI\Data
    */
-  public static function buildFromFile($file, $base64 = false, $len = Data::TAGLEN)
+  public static function buildFromFile($file, $binaryData = false, $len = Data::TAGLEN)
   {
     if ( ! $file instanceof SymfoFile)
     {
@@ -198,13 +198,18 @@ class Data
 
     $data = file_get_contents($file->getPathname());
     
-    if ($base64 && ! $data = base64_encode($data))
+    if ($binaryData && ! $data = base64_encode($data))
     {
       throw new InvalidData();
     }
     
+    if(!$binaryData)
+    {
+      $data = rawurlencode($data);
+    }
+    
     $dataURI = new static($data, $file->getMimeType(), array(), $len);
-    $dataURI->setBase64Encoded($base64);
+    $dataURI->setBinaryData($binaryData);
     
     return $dataURI;
   }

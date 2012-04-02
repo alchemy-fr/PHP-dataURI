@@ -53,7 +53,7 @@ class DumperTest extends PHPUnit_Framework_TestCase
 
     //#4
     $dataURI = DataURI\Parser::parse($tests[3]);
-    $this->assertEquals($tests[3], DataURI\Dumper::dump($dataURI));
+    $this->assertEquals($tests[3], rawurldecode(DataURI\Dumper::dump($dataURI)));
   }
 
   private function binaryToBase64($file)

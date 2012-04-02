@@ -42,28 +42,28 @@ class ParserTest extends PHPUnit_Framework_TestCase
     //#1
     $dataURI = DataURI\Parser::parse($tests[0]);
     $this->assertEquals('image/png', $dataURI->getMimeType());
-    $this->assertTrue($dataURI->isBase64Encoded());
+    $this->assertTrue($dataURI->isBinaryData());
     $this->assertTrue(is_string($dataURI->getData()));
     $this->assertEquals(0, count($dataURI->getParameters()));
 
     //#2
     $dataURI = DataURI\Parser::parse($tests[1]);
     $this->assertEquals('image/png', $dataURI->getMimeType());
-    $this->assertTrue($dataURI->isBase64Encoded());
+    $this->assertTrue($dataURI->isBinaryData());
     $this->assertTrue(is_string($dataURI->getData()));
     $this->assertEquals(1, count($dataURI->getParameters()));
 
     //#3
     $dataURI = DataURI\Parser::parse($tests[2]);
     $this->assertEquals('text/plain', $dataURI->getMimeType());
-    $this->assertFalse($dataURI->isBase64Encoded());
-    $this->assertEquals('%23%24%25', utf8_decode($dataURI->getData()));
+    $this->assertFalse($dataURI->isBinaryData());
+    $this->assertEquals('#$%', $dataURI->getData());
     $this->assertEquals(1, count($dataURI->getParameters()));
 
     //#4
     $dataURI = DataURI\Parser::parse($tests[3]);
     $this->assertEquals('application/vnd-xxx-query', $dataURI->getMimeType());
-    $this->assertFalse($dataURI->isBase64Encoded());
+    $this->assertFalse($dataURI->isBinaryData());
     $this->assertEquals('select_vcount,fcol_from_fieldtable/local', $dataURI->getData());
     $this->assertEquals(0, count($dataURI->getParameters()));
   }

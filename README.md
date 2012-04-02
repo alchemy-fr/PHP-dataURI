@@ -15,3 +15,45 @@ If you ever find a bug, please fill a ticket or send a pull request.
 ##License 
 
 MIT http://opensource.org/licenses/MIT
+
+
+##How to use it ?
+
+
+Parser
+-------
+
+```php
+
+$dataString = "data:text/plain;charset=utf-8,%23%24%25";
+$dataObject = DataURI\Parser::parse($dataString);
+
+echo $dataObject->getMimeType(); //print text/plain
+echo $dataObject->getData(); //print #$%
+echo $dataObject->getParameters(); // return an array of parameters array('charset' => 'utf-8')
+
+```
+
+
+Dumper
+------
+
+```php
+
+$dataObject = new DataUri\Data("#$%");
+echo DaraURI\Dumper::dump(dataObject); //print data:text/plain;charset=utf-8,%23%24%25
+
+```
+
+Data Object From File
+---------------------
+
+```php
+
+$dataObject = DataUri\Data::buildFromFile("/path/to/my/image.png", true);
+//second argument is for encoding binaryData in base64
+echo DaraURI\Dumper::dump(dataObject); 
+//print data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...+S/EAAAAASUVORK5CYII=
+
+```
+

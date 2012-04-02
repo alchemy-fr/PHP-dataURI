@@ -86,8 +86,8 @@ class DataTest extends PHPUnit_Framework_TestCase
   {
     $dataString = 'Lorem ipsum dolor sit amet';
     $dataURI = new DataURI\Data($dataString);
-    $dataURI->setBase64Encoded(true);
-    $this->assertTrue($dataURI->isBase64Encoded());
+    $dataURI->setBinaryData(true);
+    $this->assertTrue($dataURI->isBinaryData());
   }
 
   public function testInit()
@@ -146,7 +146,7 @@ class DataTest extends PHPUnit_Framework_TestCase
     $dataString = 'hello world';
     $dataURI = new DataURI\Data($dataString);
     $dataURI = DataURI\Data::buildFromFile($dataURI->write($filename));
-    $this->assertEquals($dataString, $dataURI->getData());
+    $this->assertEquals($dataString, rawurldecode($dataURI->getData()));
     unlink($filename);
   }
 

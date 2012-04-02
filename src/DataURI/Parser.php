@@ -84,8 +84,13 @@ class Parser
       throw new InvalidData();
     }
     
+    if(!$base64)
+    {
+      $rawData = rawurldecode($rawData);
+    }
+    
     $dataURI = new Data($rawData, $mimeType, $dataParams, $len);
-    $dataURI->setBase64Encoded($base64);
+    $dataURI->setBinaryData($base64);
     
     return $dataURI;
   }
