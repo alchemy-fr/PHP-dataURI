@@ -35,13 +35,13 @@ class Parser
   /**
    * DATA URI SCHEME REGEXP
    * offset #1 MimeType 
-   * offset #2 Paremeters
+   * offset #2 Parameters
    * offset #3 Datas
    */
   const DATA_URI_REGEXP = '/data:([a-zA-Z-\/]+)([a-zA-Z0-9-_;=]+)?,(.*)/';
   
   /**
-   * Parse a data URI 
+   * Parse a data URI and return a DataUri\Data
    * 
    * @param string $dataUri A data URI
    * @return \DataUri\Data

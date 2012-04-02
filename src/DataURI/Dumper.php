@@ -32,6 +32,15 @@ use DataUri\Data;
 class Dumper
 {
 
+  /**
+   * Transform a DataURI\Data object to its URI representation and take 
+   * the following form :
+   * 
+   * data:[<mediatype>][;base64],<data>
+   * 
+   * @param Data $dataURI
+   * @return string 
+   */
   public static function dump(Data $dataURI)
   {
     $parameters = '';
