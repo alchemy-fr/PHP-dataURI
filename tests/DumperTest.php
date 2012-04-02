@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2012 Nicolas Le Goff
+ * Copyright (c) 2012 Alchemy-fr
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -21,7 +21,8 @@
 
 /**
  *
- * @author      
+ * @author      Nicolas Le Goff
+ * @author      Phraseanet team    
  * @license     http://opensource.org/licenses/MIT MIT
  */
 class DumperTest extends PHPUnit_Framework_TestCase
@@ -30,7 +31,7 @@ class DumperTest extends PHPUnit_Framework_TestCase
   public function testDump()
   {
     $b64 = $this->binaryToBase64(__DIR__ . '/smile.png');
-    
+
     $tests = array(
         "data:image/png;base64," . $b64,
         "data:image/png;paramName=paramValue;base64," . $b64,

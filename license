@@ -1,7 +1,5 @@
-<?php
-
 /**
- * Copyright (c) 2012 Nicolas Le Goff
+ * Copyright (c) 2012 Nicolas Le Goff / Alchemy
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -18,44 +16,3 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
-
-namespace DataURI;
-
-use DataUri\Data;
-
-/**
- *
- * @author      Nicolas Le Goff
- * @author      Phraseanet team 
- * @license     http://opensource.org/licenses/MIT MIT
- */
-class Dumper
-{
-
-  public static function dump(Data $dataURI)
-  {
-    $parameters = '';
-
-    if (0 !== count($params = $dataURI->getParameters()))
-    {
-      foreach ($params as $paramName => $paramValue)
-      {
-        $parameters .= sprintf(';%s=%s', $paramName, $paramValue);
-      }
-    }
-
-    $base64 = $dataURI->isBase64Encoded() ? sprintf(';%s', Data::BASE_64) : '';
-    
-    $data = $dataURI->isBase64Encoded() ?
-            base64_encode($dataURI->getData()) :
-            $dataURI->getData();
-    
-    return sprintf('data:%s%s%s,%s'
-                    , $dataURI->getMimeType()
-                    , $parameters
-                    , $base64
-                    , $data
-    );
-  }
-
-}

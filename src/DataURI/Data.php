@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2012 Nicolas Le Goff
+ * Copyright (c) 2012 Alchemy-fr
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -29,7 +29,8 @@ use Symfony\Component\HttpFoundation\File\File as SymfoFile;
 
 /**
  *
- * @author      
+ * @author      Nicolas Le Goff
+ * @author      Phraseanet team 
  * @license     http://opensource.org/licenses/MIT MIT
  */
 class Data
