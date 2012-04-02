@@ -250,10 +250,6 @@ class Data
     {
       throw new TooLongData('Too long data', strlen($this->data));
     }
-    else
-    {
-      throw new \InvalidArgumentException('Data length is not valid');
-    }
 
     if (null === $this->mimeType)
     {
