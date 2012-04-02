@@ -1,0 +1,23 @@
+{
+  "name": "datauri/datauri",
+  "type": "library",
+  "description": "PHP DataURI component",
+  "keywords": [],
+  "license": "MIT",
+  "authors": [
+  {
+    "name": "",
+    "email": "",
+    "homepage": ""
+  }
+  ],
+  "require": {
+    "php": ">=5.3.6",
+    "symfony/http-foundation": "2.1.*"
+  },
+  "autoload": {
+    "psr-0": {
+      "DataURI": "src"
+    }
+  }
+}
