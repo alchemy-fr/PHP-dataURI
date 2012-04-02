@@ -24,7 +24,7 @@ Parser
 -------
 
 ```php
-
+<?php
 $dataString = "data:text/plain;charset=utf-8,%23%24%25";
 $dataObject = DataURI\Parser::parse($dataString);
 
@@ -39,7 +39,7 @@ Dumper
 ------
 
 ```php
-
+<?php
 $dataObject = new DataUri\Data("#$%");
 echo DaraURI\Dumper::dump(dataObject); //print data:text/plain;charset=utf-8,%23%24%25
 
@@ -49,7 +49,7 @@ Data Object From File
 ---------------------
 
 ```php
-
+<?php
 $dataObject = DataUri\Data::buildFromFile("/path/to/my/image.png", true);
 //second argument is for encoding binaryData in base64
 echo DaraURI\Dumper::dump(dataObject); 
