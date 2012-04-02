@@ -41,6 +41,7 @@ Dumper
 ```php
 <?php
 $dataObject = new DataUri\Data("#$%");
+$dataObject->addParameters('charset' => 'utf-8');
 echo DaraURI\Dumper::dump(dataObject); //print data:text/plain;charset=utf-8,%23%24%25
 
 ```
