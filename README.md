@@ -1,6 +1,8 @@
 PHP DataURI
 ============
 
+[![Build Status](https://secure.travis-ci.org/alchemy-fr/PHP-dataURI.png?branch=master)](http://travis-ci.org/alchemy-fr/PHP-dataURI)
+
 ##What is it ?
 
 PHP DataURI is  a library which handles URI scheme and provide a way to include
