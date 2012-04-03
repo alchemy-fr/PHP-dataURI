@@ -40,7 +40,7 @@ Dumper
 
 ```php
 <?php
-$dataObject = new DataUri\Data("#$%");
+$dataObject = new DataURI\Data("#$%");
 $dataObject->addParameters('charset' => 'utf-8');
 echo DaraURI\Dumper::dump(dataObject); //print data:text/plain;charset=utf-8,%23%24%25
 
@@ -51,7 +51,7 @@ Data Object From File
 
 ```php
 <?php
-$dataObject = DataUri\Data::buildFromFile("/path/to/my/image.png", true);
+$dataObject = DataURI\Data::buildFromFile("/path/to/my/image.png", true);
 //second argument is for encoding binaryData in base64
 echo DaraURI\Dumper::dump(dataObject); 
 //print data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...+S/EAAAAASUVORK5CYII=
