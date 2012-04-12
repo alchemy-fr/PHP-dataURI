@@ -96,7 +96,7 @@ class Data
    * @var boolean 
    */
   protected $binaryData = false;
-
+  
   /**
    * A DataURI Object which by default has a 'text/plain'
    * media type and a 'charset=US-ASCII' as optionnal parameter
@@ -104,15 +104,16 @@ class Data
    * @param string $data Data to include as "immediate" data
    * @param string $mimeType Mime type of media
    * @param array $parameters Array of optionnal parameters
+   * @param boolean $strict check length of datas
    * @param int $length Define Length of datas
    */
-  public function __construct($data, $mimeType = null, Array $parameters = array(), $length = self::TAGLEN)
+  public function __construct($data, $mimeType = null, Array $parameters = array(), $strict = false, $length = self::TAGLEN)
   {
     $this->data = $data;
     $this->mimeType = $mimeType;
     $this->parameters = $parameters;
-
-    $this->init($length);
+    
+    $this->init($length, $strict);
   }
 
   /**
@@ -237,16 +238,17 @@ class Data
 
    * 
    * @param int $length Max allowed data length
+   * @param boolean $strict Check or not data length
    * @throws TooLongData
    * @return void 
    */
-  private function init($length)
+  private function init($length, $strict)
   {
-    if ($length === self::LITLEN && strlen($this->data) > self::LIT_LIMIT)
+    if ($strict && $length === self::LITLEN && strlen($this->data) > self::LIT_LIMIT)
     {
       throw new TooLongData('Too long data', strlen($this->data));
     }
-    elseif (strlen($this->data) > self::ATTS_TAG_LIMIT)
+    elseif ($strict && strlen($this->data) > self::ATTS_TAG_LIMIT)
     {
       throw new TooLongData('Too long data', strlen($this->data));
     }

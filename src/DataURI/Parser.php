@@ -89,7 +89,7 @@ class Parser
       $rawData = rawurldecode($rawData);
     }
     
-    $dataURI = new Data($rawData, $mimeType, $dataParams, $len);
+    $dataURI = new Data($rawData, $mimeType, $dataParams, $strict, $len);
     $dataURI->setBinaryData($base64);
     
     return $dataURI;
