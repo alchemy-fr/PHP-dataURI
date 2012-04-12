@@ -22,7 +22,7 @@
 namespace DataURI;
 
 use DataURI\Exception\InvalidData,
-    DataUri\Data;
+    DataURI\Data;
 
 /**
  * @author      Nicolas Le Goff
