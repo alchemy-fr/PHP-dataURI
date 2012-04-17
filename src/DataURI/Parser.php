@@ -22,7 +22,7 @@
 namespace DataURI;
 
 use DataURI\Exception\InvalidData,
-    DataUri\Data;
+    DataURI\Data;
 
 /**
  * @author      Nicolas Le Goff
@@ -35,13 +35,13 @@ class Parser
   /**
    * DATA URI SCHEME REGEXP
    * offset #1 MimeType 
-   * offset #2 Paremeters
+   * offset #2 Parameters
    * offset #3 Datas
    */
   const DATA_URI_REGEXP = '/data:([a-zA-Z-\/]+)([a-zA-Z0-9-_;=]+)?,(.*)/';
   
   /**
-   * Parse a data URI 
+   * Parse a data URI and return a DataUri\Data
    * 
    * @param string $dataUri A data URI
    * @return \DataUri\Data
@@ -54,7 +54,7 @@ class Parser
 
     if ( ! preg_match(self::DATA_URI_REGEXP, $dataUri, $matches))
     {
-      throw new \InvalidArgumentException();
+      throw new \InvalidArgumentException('Could not parse the URL scheme');
     }
 
     $base64 = false;
@@ -81,7 +81,7 @@ class Parser
     
     if (($base64 && ! $rawData = base64_decode($rawData, $strict)))
     {
-      throw new InvalidData();
+      throw new InvalidData('base64 encoding failed');
     }
     
     if(!$base64)
@@ -89,7 +89,7 @@ class Parser
       $rawData = rawurldecode($rawData);
     }
     
-    $dataURI = new Data($rawData, $mimeType, $dataParams, $len);
+    $dataURI = new Data($rawData, $mimeType, $dataParams, $strict, $len);
     $dataURI->setBinaryData($base64);
     
     return $dataURI;

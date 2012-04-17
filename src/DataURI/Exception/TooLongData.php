@@ -27,8 +27,30 @@ namespace DataURI\Exception;
  * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
-
 class TooLongData extends \Exception
 {
+
+  /**
+   * Current length of data
+   * @var int 
+   */
+  protected $length;
+
+  public function __construct($message, $length)
+  {
+    parent::__construct($message);
+    $this->length = $length;
+  }
   
+  /**
+   * Length of the data
+   * @return int
+   */
+  public function getLength()
+  {
+    return $this->length;
+  }
+
+
+
 }

@@ -28,7 +28,12 @@ use DataURI\Exception\FileExists,
 use Symfony\Component\HttpFoundation\File\File as SymfoFile;
 
 /**
- *
+ * DataURI\Data object is a representation of an url which embed (small)
+ * media type data directly inline.
+ * 
+ * It owns three main properties : 
+ * the data, the type of the media and some optional parameters
+ * 
  * @author      Nicolas Le Goff
  * @author      Phraseanet team 
  * @license     http://opensource.org/licenses/MIT MIT
@@ -87,18 +92,28 @@ class Data
   protected $parameters;
 
   /**
-   * Tell whether data is encoded 
+   * Tell whether data is binary datas 
    * @var boolean 
    */
   protected $binaryData = false;
-
-  public function __construct($data, $mimeType = null, Array $parameters = array(), $length = self::TAGLEN)
+  
+  /**
+   * A DataURI Object which by default has a 'text/plain'
+   * media type and a 'charset=US-ASCII' as optionnal parameter
+   * 
+   * @param string $data Data to include as "immediate" data
+   * @param string $mimeType Mime type of media
+   * @param array $parameters Array of optionnal parameters
+   * @param boolean $strict check length of datas
+   * @param int $length Define Length of datas
+   */
+  public function __construct($data, $mimeType = null, Array $parameters = array(), $strict = false, $length = self::TAGLEN)
   {
     $this->data = $data;
     $this->mimeType = $mimeType;
     $this->parameters = $parameters;
-
-    $this->init($length);
+    
+    $this->init($length, $strict);
   }
 
   /**
@@ -111,7 +126,7 @@ class Data
   }
 
   /**
-   * File mime type
+   * Media type
    * @return string 
    */
   public function getMimeType()
@@ -129,7 +144,7 @@ class Data
   }
 
   /**
-   * Data is base64 encoded
+   * Data is binary data
    * @return boolean 
    */
   public function isBinaryData()
@@ -138,9 +153,10 @@ class Data
   }
 
   /**
-   * Set if Data is base64 encoded
+   * Set if Data is binary data
+   * 
    * @param boolean $binaryData
-   * @return \DataURI\Data 
+   * @return \DataURI\Data
    */
   public function setBinaryData($binaryData)
   {
@@ -149,7 +165,7 @@ class Data
   }
 
   /**
-   * Add a parameters to the DataURi
+   * Add a custom parameters to the DataURi
    * 
    * @param string $paramName
    * @param string $paramValue
@@ -166,7 +182,7 @@ class Data
    * Write datas to the specified file
    * 
    * @param string $pathfile File to be written
-   * @param Boolean $override Datas to write
+   * @param Boolean $override Override file or not
    * @return \Symfony\Component\HttpFoundation\File\File
    * @throws FileNotFound
    * @throws FileExists 
@@ -175,7 +191,7 @@ class Data
   {
     if ( ! file_exists($pathfile))
     {
-      throw new FileNotFound();
+      throw new FileNotFound(sprintf('%s file does not exist', $pathfile));
     }
 
     file_put_contents($pathfile, $this->data, $override ? 0 : FILE_APPEND);
@@ -184,10 +200,12 @@ class Data
   }
 
   /**
-   * Get a new instance of DataUri\File from SplFileInfo object
+   * Get a new instance of DataUri\Data from a file
    * 
-   * @param \SplFileInfo $file
-   * @return \DataURI\Data
+   * @param string $file Path to the located file
+   * @param boolean $binaryData Tell whether the file is a binary file
+   * @param int $len The max allowed data length
+   * @return \DataURI\Data  
    */
   public static function buildFromFile($file, $binaryData = false, $len = Data::TAGLEN)
   {
@@ -200,7 +218,7 @@ class Data
     
     if ($binaryData && ! $data = base64_encode($data))
     {
-      throw new InvalidData();
+      throw new InvalidData('base64 encoding failed');
     }
     
     if(!$binaryData)
@@ -209,6 +227,7 @@ class Data
     }
     
     $dataURI = new static($data, $file->getMimeType(), array(), $len);
+    
     $dataURI->setBinaryData($binaryData);
     
     return $dataURI;
@@ -216,18 +235,22 @@ class Data
 
   /**
    * Contructor initialization
+
    * 
+   * @param int $length Max allowed data length
+   * @param boolean $strict Check or not data length
+   * @throws TooLongData
    * @return void 
    */
-  private function init($length)
+  private function init($length, $strict)
   {
-    if ($length === self::LITLEN && strlen($this->data) > self::LIT_LIMIT)
+    if ($strict && $length === self::LITLEN && strlen($this->data) > self::LIT_LIMIT)
     {
-      throw new TooLongData();
+      throw new TooLongData('Too long data', strlen($this->data));
     }
-    elseif (strlen($this->data) > self::ATTS_TAG_LIMIT)
+    elseif ($strict && strlen($this->data) > self::ATTS_TAG_LIMIT)
     {
-      throw new TooLongData();
+      throw new TooLongData('Too long data', strlen($this->data));
     }
 
     if (null === $this->mimeType)
