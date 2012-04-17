@@ -16,20 +16,23 @@
  * For example :
  * $phpDir="c:/php5310/"
  */
+call_user_func(function()
+  {
+      $phpDir = "";
 
-$phpDir = "";
+      chdir(__DIR__);
 
-chdir(__DIR__);
+      set_time_limit(0);
 
-set_time_limit(0);
+      $composer = __DIR__ . '/composer.phar';
 
-$composer = __DIR__ . '/composer.phar';
+      if ( ! file_exists($composer))
+      {
+          file_put_contents($composer, file_get_contents('http://getcomposer.org/installer'), LOCK_EX);
+          system($phpDir . 'php ' . $composer . ' install');
+      }
 
-if ( ! file_exists($composer))
-{
-    file_put_contents($composer, file_get_contents('http://getcomposer.org/installer'), LOCK_EX);
-    system($phpDir . 'php ' . $composer . ' install');
-}
+      system($phpDir . 'php ' . $composer . ' self-update');
+      system($phpDir . 'php ' . $composer . ' update');
+  });
 
-system($phpDir . 'php ' . $composer . ' self-update');
-system($phpDir . 'php ' . $composer . ' update');
