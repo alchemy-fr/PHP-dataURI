@@ -74,7 +74,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     {
       $invalidData = 'data:image/gif;base64,';
       DataURI\Parser::parse($invalidData);
-      $this->fail('Should raised an \DataURI\Exception\InvalidData Exception');
+      $this->fail('Should raise an \DataURI\Exception\InvalidData Exception');
     }
     catch (\DataURI\Exception\InvalidData $e)
     {
@@ -88,7 +88,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     {
       $invalidData = 'lorem:image:test,datas';
       DataURI\Parser::parse($invalidData);
-      $this->fail('Should raised an InvalidArgumentException Exception');
+      $this->fail('Should raise an InvalidArgumentException Exception');
     }
     catch (\InvalidArgumentException $e)
     {
