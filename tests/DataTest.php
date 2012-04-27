@@ -124,14 +124,14 @@ class DataTest extends PHPUnit_Framework_TestCase
 
   public function testFileNotFound()
   {
-    $filename = __DIR__ . '/unknow-file';
+    $filename = __DIR__ . '/unknown-file';
 
     try
     {
       $dataString = 'Lorem ipsum dolor sit amet';
       $dataURI = new DataURI\Data($dataString);
       $dataURI->write($filename);
-      $this->fail('Sould raise a DataURI\Exception\invalidData ');
+      $this->fail('Should raise a DataURI\Exception\invalidData Exception');
     }
     catch (DataURI\Exception\FileNotFound $e)
     {
