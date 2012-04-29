@@ -94,25 +94,25 @@ class Data
      * Tell whether data is binary datas
      * @var boolean
      */
-    protected $binaryData = false;
+    protected $isBinaryData = false;
 
     /**
      * A DataURI Object which by default has a 'text/plain'
      * media type and a 'charset=US-ASCII' as optionnal parameter
      *
-     * @param string $data Data to include as "immediate" data
-     * @param string $mimeType Mime type of media
-     * @param array $parameters Array of optionnal parameters
-     * @param boolean $strict check length of datas
-     * @param int $length Define Length of datas
+     * @param string    $data       Data to include as "immediate" data
+     * @param string    $mimeType   Mime type of media
+     * @param array     $parameters Array of optionnal parameters
+     * @param boolean   $strict     Check length of datas
+     * @param int       $lengthMode Define Length of datas
      */
-    public function __construct($data, $mimeType = null, Array $parameters = array(), $strict = false, $length = self::TAGLEN)
+    public function __construct($data, $mimeType = null, Array $parameters = array(), $strict = false, $lengthMode = self::TAGLEN)
     {
         $this->data = $data;
         $this->mimeType = $mimeType;
         $this->parameters = $parameters;
 
-        $this->init($length, $strict);
+        $this->init($lengthMode, $strict);
     }
 
     /**
@@ -148,18 +148,18 @@ class Data
      */
     public function isBinaryData()
     {
-        return $this->binaryData;
+        return $this->isBinaryData;
     }
 
     /**
      * Set if Data is binary data
      *
-     * @param boolean $binaryData
+     * @param boolean $boolean
      * @return \DataURI\Data
      */
-    public function setBinaryData($binaryData)
+    public function setBinaryData($boolean)
     {
-        $this->binaryData = $binaryData;
+        $this->isBinaryData = (boolean) $boolean;
         return $this;
     }
 
@@ -180,9 +180,11 @@ class Data
     /**
      * Write datas to the specified file
      *
-     * @param string $pathfile File to be written
-     * @param Boolean $override Override file or not
+     * @param string    $pathfile   File to be written
+     * @param Boolean   $override   Override existing file
+     *
      * @return \Symfony\Component\HttpFoundation\File\File
+     *
      * @throws FileNotFoundException
      * @throws FileExistsException
      */
@@ -200,12 +202,13 @@ class Data
     /**
      * Get a new instance of DataUri\Data from a file
      *
-     * @param string $file Path to the located file
-     * @param boolean $binaryData Tell whether the file is a binary file
-     * @param int $len The max allowed data length
+     * @param string    $file           Path to the located file
+     * @param boolean   $isBinaryData   File contents is binary
+     * @param boolean   $strict         Use strict mode
+     * @param int       $lengthMode     The length mode
      * @return \DataURI\Data
      */
-    public static function buildFromFile($file, $binaryData = false, $len = Data::TAGLEN)
+    public static function buildFromFile($file, $isBinaryData = false, $strict = false, $lengthMode = Data::TAGLEN)
     {
         if ( ! $file instanceof SymfoFile) {
             $file = new SymfoFile($file);
@@ -213,17 +216,17 @@ class Data
 
         $data = file_get_contents($file->getPathname());
 
-        if ($binaryData && ! $data = base64_encode($data)) {
+        if ($isBinaryData && ! $data = base64_encode($data)) {
             throw new InvalidDataException('base64 encoding failed');
         }
 
-        if ( ! $binaryData) {
+        if ( ! $isBinaryData) {
             $data = rawurlencode($data);
         }
 
-        $dataURI = new static($data, $file->getMimeType(), array(), $len);
+        $dataURI = new static($data, $file->getMimeType(), array(), $strict, $lengthMode);
 
-        $dataURI->setBinaryData($binaryData);
+        $dataURI->setBinaryData($isBinaryData);
 
         return $dataURI;
     }
@@ -232,14 +235,14 @@ class Data
      * Contructor initialization
 
      *
-     * @param int $length Max allowed data length
-     * @param boolean $strict Check or not data length
+     * @param int       $lengthMode     Max allowed data length
+     * @param boolean   $strict         Check data length
      * @throws TooLongDataException
      * @return void
      */
-    private function init($length, $strict)
+    private function init($lengthMode, $strict)
     {
-        if ($strict && $length === self::LITLEN && strlen($this->data) > self::LIT_LIMIT) {
+        if ($strict && $lengthMode === self::LITLEN && strlen($this->data) > self::LIT_LIMIT) {
             throw new TooLongDataException('Too long data', strlen($this->data));
         } elseif ($strict && strlen($this->data) > self::ATTS_TAG_LIMIT) {
             throw new TooLongDataException('Too long data', strlen($this->data));
