@@ -38,14 +38,14 @@ class DataTest extends PHPUnit_Framework_TestCase
         }
 
         try {
-            $dataURI = new DataURI\Data($string);
+            $dataURI = new DataURI\Data($string, null, array(), true);
             $this->fail('An exception should have beeen raised');
         } catch (DataURI\Exception\TooLongDataException $e) {
 
         }
 
         try {
-            $dataURI = new DataURI\Data($string, null, array(), DataURI\Data::LITLEN);
+            $dataURI = new DataURI\Data($string, null, array(), true, DataURI\Data::LITLEN);
             $this->fail('An exception should have beeen raised');
         } catch (DataURI\Exception\TooLongDataException $e) {
 
@@ -118,7 +118,7 @@ class DataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DataURI\Exception\invalidData Exception
+     * @expectedException \DataURI\Exception\FileNotFoundException
      */
     public function testFileNotFound()
     {
