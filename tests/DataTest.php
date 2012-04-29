@@ -44,6 +44,8 @@ class DataTest extends PHPUnit_Framework_TestCase
 
         }
 
+        $dataURI = new DataURI\Data($string);
+
         try {
             $dataURI = new DataURI\Data($string, null, array(), true, DataURI\Data::LITLEN);
             $this->fail('An exception should have beeen raised');
