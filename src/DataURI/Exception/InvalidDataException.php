@@ -24,11 +24,10 @@ namespace DataURI\Exception;
 /**
  *
  * @author      Nicolas Le Goff
- * @author      Phraseanet team 
+ * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
-
-class InvalidData extends \Exception
+class InvalidDataException extends \Exception implements Exception
 {
-  
+
 }

@@ -28,77 +28,56 @@
 class ParserTest extends PHPUnit_Framework_TestCase
 {
 
-  public function testParse()
-  {
-    $b64 = $this->binaryToBase64(__DIR__ . '/smile.png');
-
-    $tests = array(
-        "data:image/png;base64," . $b64,
-        "data:image/png;paramName=paramValue;base64," . $b64,
-        "data:text/plain;charset=utf-8,%23%24%25",
-        "data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local"
-    );
-
-    //#1
-    $dataURI = DataURI\Parser::parse($tests[0]);
-    $this->assertEquals('image/png', $dataURI->getMimeType());
-    $this->assertTrue($dataURI->isBinaryData());
-    $this->assertTrue(is_string($dataURI->getData()));
-    $this->assertEquals(0, count($dataURI->getParameters()));
-
-    //#2
-    $dataURI = DataURI\Parser::parse($tests[1]);
-    $this->assertEquals('image/png', $dataURI->getMimeType());
-    $this->assertTrue($dataURI->isBinaryData());
-    $this->assertTrue(is_string($dataURI->getData()));
-    $this->assertEquals(1, count($dataURI->getParameters()));
-
-    //#3
-    $dataURI = DataURI\Parser::parse($tests[2]);
-    $this->assertEquals('text/plain', $dataURI->getMimeType());
-    $this->assertFalse($dataURI->isBinaryData());
-    $this->assertEquals('#$%', $dataURI->getData());
-    $this->assertEquals(1, count($dataURI->getParameters()));
-
-    //#4
-    $dataURI = DataURI\Parser::parse($tests[3]);
-    $this->assertEquals('application/vnd-xxx-query', $dataURI->getMimeType());
-    $this->assertFalse($dataURI->isBinaryData());
-    $this->assertEquals('select_vcount,fcol_from_fieldtable/local', $dataURI->getData());
-    $this->assertEquals(0, count($dataURI->getParameters()));
-  }
-
-  public function testInvalidDataException()
-  {
-    try
+    public function testParse()
     {
-      $invalidData = 'data:image/gif;base64,';
-      DataURI\Parser::parse($invalidData);
-      $this->fail('Should raise an \DataURI\Exception\InvalidData Exception');
-    }
-    catch (\DataURI\Exception\InvalidData $e)
-    {
-      
-    }
-  }
-  
-  public function testInvalidArgumentException()
-  {
-    try
-    {
-      $invalidData = 'lorem:image:test,datas';
-      DataURI\Parser::parse($invalidData);
-      $this->fail('Should raise an InvalidArgumentException Exception');
-    }
-    catch (\InvalidArgumentException $e)
-    {
-      
-    }
-  }
-  
-  private function binaryToBase64($file)
-  {
-    return base64_encode(file_get_contents($file));
-  }
+        $b64 = $this->binaryToBase64(__DIR__ . '/smile.png');
 
+        $tests = array(
+            "data:image/png;base64," . $b64,
+            "data:image/png;paramName=paramValue;base64," . $b64,
+            "data:text/plain;charset=utf-8,%23%24%25",
+            "data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local"
+        );
+
+        $dataURI = DataURI\Parser::parse($tests[0]);
+        $this->assertEquals('image/png', $dataURI->getMimeType());
+        $this->assertTrue($dataURI->isBinaryData());
+        $this->assertTrue(is_string($dataURI->getData()));
+        $this->assertEquals(0, count($dataURI->getParameters()));
+
+        $dataURI = DataURI\Parser::parse($tests[1]);
+        $this->assertEquals('image/png', $dataURI->getMimeType());
+        $this->assertTrue($dataURI->isBinaryData());
+        $this->assertTrue(is_string($dataURI->getData()));
+        $this->assertEquals(1, count($dataURI->getParameters()));
+
+        $dataURI = DataURI\Parser::parse($tests[2]);
+        $this->assertEquals('text/plain', $dataURI->getMimeType());
+        $this->assertFalse($dataURI->isBinaryData());
+        $this->assertEquals('#$%', $dataURI->getData());
+        $this->assertEquals(1, count($dataURI->getParameters()));
+    }
+
+    /**
+     * @expectedException \DataURI\Exception\InvalidDataException
+     */
+    public function testInvalidDataException()
+    {
+        $invalidData = 'data:image/gif;base64,';
+        DataURI\Parser::parse($invalidData);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidArgumentException()
+    {
+        $invalidData = 'lorem:image:test,datas';
+        DataURI\Parser::parse($invalidData);
+    }
+
+    private function binaryToBase64($file)
+    {
+        return base64_encode(file_get_contents($file));
+    }
 }

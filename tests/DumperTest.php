@@ -22,43 +22,42 @@
 /**
  *
  * @author      Nicolas Le Goff
- * @author      Phraseanet team    
+ * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
 class DumperTest extends PHPUnit_Framework_TestCase
 {
 
-  public function testDump()
-  {
-    $b64 = $this->binaryToBase64(__DIR__ . '/smile.png');
+    public function testDump()
+    {
+        $b64 = $this->binaryToBase64(__DIR__ . '/smile.png');
 
-    $tests = array(
-        "data:image/png;base64," . $b64,
-        "data:image/png;paramName=paramValue;base64," . $b64,
-        "data:text/plain;charset=utf-8,%23%24%25",
-        "data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local"
-    );
+        $tests = array(
+            "data:image/png;base64," . $b64,
+            "data:image/png;paramName=paramValue;base64," . $b64,
+            "data:text/plain;charset=utf-8,%23%24%25",
+            "data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local"
+        );
 
-    //#1
-    $dataURI = DataURI\Parser::parse($tests[0]);
-    $this->assertEquals($tests[0], DataURI\Dumper::dump($dataURI));
+        //#1
+        $dataURI = DataURI\Parser::parse($tests[0]);
+        $this->assertEquals($tests[0], DataURI\Dumper::dump($dataURI));
 
-    //#2
-    $dataURI = DataURI\Parser::parse($tests[1]);
-    $this->assertEquals($tests[1], DataURI\Dumper::dump($dataURI));
+        //#2
+        $dataURI = DataURI\Parser::parse($tests[1]);
+        $this->assertEquals($tests[1], DataURI\Dumper::dump($dataURI));
 
-    //#3
-    $dataURI = DataURI\Parser::parse($tests[2]);
-    $this->assertEquals($tests[2], DataURI\Dumper::dump($dataURI));
+        //#3
+        $dataURI = DataURI\Parser::parse($tests[2]);
+        $this->assertEquals($tests[2], DataURI\Dumper::dump($dataURI));
 
-    //#4
-    $dataURI = DataURI\Parser::parse($tests[3]);
-    $this->assertEquals($tests[3], rawurldecode(DataURI\Dumper::dump($dataURI)));
-  }
+        //#4
+        $dataURI = DataURI\Parser::parse($tests[3]);
+        $this->assertEquals($tests[3], rawurldecode(DataURI\Dumper::dump($dataURI)));
+    }
 
-  private function binaryToBase64($file)
-  {
-    return base64_encode(file_get_contents($file));
-  }
-
+    private function binaryToBase64($file)
+    {
+        return base64_encode(file_get_contents($file));
+    }
 }

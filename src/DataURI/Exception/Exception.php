@@ -27,8 +27,7 @@ namespace DataURI\Exception;
  * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
-
-class FileNotFound extends \Exception
+interface Exception
 {
-  
+
 }

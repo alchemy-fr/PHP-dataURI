@@ -27,8 +27,7 @@ namespace DataURI\Exception;
  * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
-
-class FileExists extends \Exception
+class FileExistsException extends \Exception implements Exception
 {
-  
+
 }

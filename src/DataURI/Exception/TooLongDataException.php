@@ -19,9 +19,7 @@
  * IN THE SOFTWARE.
  */
 
-namespace DataURI;
-
-use DataUri\Data;
+namespace DataURI\Exception;
 
 /**
  *
@@ -29,39 +27,26 @@ use DataUri\Data;
  * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
-class Dumper
+class TooLongDataException extends \Exception implements Exception
 {
+    /**
+     * Current length of data
+     * @var int
+     */
+    protected $length;
+
+    public function __construct($message, $length)
+    {
+        parent::__construct($message);
+        $this->length = $length;
+    }
 
     /**
-     * Transform a DataURI\Data object to its URI representation and take
-     * the following form :
-     *
-     * data:[<mediatype>][;base64],<data>
-     *
-     * @param Data $dataURI
-     * @return string
+     * Length of the data
+     * @return int
      */
-    public static function dump(Data $dataURI)
+    public function getLength()
     {
-        $parameters = '';
-
-        if (0 !== count($params = $dataURI->getParameters())) {
-            foreach ($params as $paramName => $paramValue) {
-                $parameters .= sprintf(';%s=%s', $paramName, $paramValue);
-            }
-        }
-
-        $base64 = $dataURI->isBinaryData() ? sprintf(';%s', Data::BASE_64) : '';
-
-        $data = $dataURI->isBinaryData() ?
-            base64_encode($dataURI->getData()) :
-            rawurlencode($dataURI->getData());
-
-        return sprintf('data:%s%s%s,%s'
-                , $dataURI->getMimeType()
-                , $parameters
-                , $base64
-                , $data
-        );
+        return $this->length;
     }
 }

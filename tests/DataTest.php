@@ -22,139 +22,128 @@
 /**
  *
  * @author      Nicolas Le Goff
- * @author      Phraseanet team   
+ * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
 class DataTest extends PHPUnit_Framework_TestCase
 {
 
-  public function testTooLongException()
-  {
-    $i = 0;
-    $string = '';
-    while ($i < DataURI\Data::ATTS_TAG_LIMIT + 1)
+    public function testTooLongException()
     {
-      $string .= 'x';
-      $i ++;
+        $i = 0;
+        $string = '';
+        while ($i < DataURI\Data::ATTS_TAG_LIMIT + 1) {
+            $string .= 'x';
+            $i ++;
+        }
+
+        try {
+            $dataURI = new DataURI\Data($string);
+            $this->fail('An exception should have beeen raised');
+        } catch (DataURI\Exception\TooLongDataException $e) {
+
+        }
+
+        try {
+            $dataURI = new DataURI\Data($string, null, array(), DataURI\Data::LITLEN);
+            $this->fail('An exception should have beeen raised');
+        } catch (DataURI\Exception\TooLongDataException $e) {
+
+        }
     }
 
-    try
+    public function testGetData()
     {
-      $dataURI = new DataURI\Data($string);
-    }
-    catch (DataURI\Exception\TooLongData $e)
-    {
-      
+        $dataString = 'Lorem ipsum dolor sit amet';
+        $dataURI = new DataURI\Data($dataString);
+        $this->assertEquals($dataString, $dataURI->getData());
     }
 
-    try
+    public function testGetMimeType()
     {
-      $dataURI = new DataURI\Data($string, null, array(), DataURI\Data::LITLEN);
+        $dataString = 'Lorem ipsum dolor sit amet';
+        $mimeType = 'text/plain';
+        $dataURI = new DataURI\Data($dataString, $mimeType);
+        $this->assertEquals($mimeType, $dataURI->getMimeType());
     }
-    catch (DataURI\Exception\TooLongData $e)
+
+    public function testGetParameters()
     {
-      
+        $dataString = 'Lorem ipsum dolor sit amet';
+        $mimeType = 'text/plain';
+        $parameters = array('charset', 'utf-8');
+        $dataURI = new DataURI\Data($dataString, $mimeType, $parameters);
+        $this->assertEquals($parameters, $dataURI->getParameters());
+        $this->assertTrue(is_array($dataURI->getParameters()));
     }
-  }
 
-  public function testGetData()
-  {
-    $dataString = 'Lorem ipsum dolor sit amet';
-    $dataURI = new DataURI\Data($dataString);
-    $this->assertEquals($dataString, $dataURI->getData());
-  }
-
-  public function testGetMimeType()
-  {
-    $dataString = 'Lorem ipsum dolor sit amet';
-    $mimeType = 'text/plain';
-    $dataURI = new DataURI\Data($dataString, $mimeType);
-    $this->assertEquals($mimeType, $dataURI->getMimeType());
-  }
-
-  public function testGetParameters()
-  {
-    $dataString = 'Lorem ipsum dolor sit amet';
-    $mimeType = 'text/plain';
-    $parameters = array('charset', 'utf-8');
-    $dataURI = new DataURI\Data($dataString, $mimeType, $parameters);
-    $this->assertEquals($parameters, $dataURI->getParameters());
-    $this->assertTrue(is_array($dataURI->getParameters()));
-  }
-
-  public function testIsBase64Encoded()
-  {
-    $dataString = 'Lorem ipsum dolor sit amet';
-    $dataURI = new DataURI\Data($dataString);
-    $dataURI->setBinaryData(true);
-    $this->assertTrue($dataURI->isBinaryData());
-  }
-
-  public function testInit()
-  {
-    $dataString = 'Lorem ipsum dolor sit amet';
-    $dataURI = new DataURI\Data($dataString);
-    $parameters = $dataURI->getParameters();
-    $this->assertTrue(array_key_exists('charset', $parameters));
-    $this->assertEquals('US-ASCII', $parameters['charset']);
-
-    $this->assertEquals('text/plain', $dataURI->getMimeType());
-  }
-
-  public function testAddParameters()
-  {
-    $dataString = 'Lorem ipsum dolor sit amet';
-    $dataURI = new DataURI\Data($dataString);
-    $current = count($dataURI->getParameters());
-    $dataURI->addParameters('charset', 'iso-8859-7');
-    $this->assertEquals($current, count($dataURI->getParameters()));
-    $dataURI->addParameters('another-charset', 'iso-8859-7');
-    $this->assertGreaterThan($current, count($dataURI->getParameters()));
-    $this->assertTrue(array_key_exists('another-charset', $dataURI->getParameters()));
-  }
-
-  public function testBuildFromFile()
-  {
-    $file = __DIR__ . '/smile.png';
-    $dataURI = DataURI\Data::buildFromFile($file, true);
-    $this->assertInstanceOf('DataURI\Data', $dataURI);
-    $this->assertEquals('image/png', $dataURI->getMimeType());
-    $this->assertEquals(file_get_contents($file), base64_decode($dataURI->getData()));
-  }
-
-  public function testFileNotFound()
-  {
-    $filename = __DIR__ . '/unknown-file';
-
-    try
+    public function testIsBase64Encoded()
     {
-      $dataString = 'Lorem ipsum dolor sit amet';
-      $dataURI = new DataURI\Data($dataString);
-      $dataURI->write($filename);
-      $this->fail('Should raise a DataURI\Exception\invalidData Exception');
+        $dataString = 'Lorem ipsum dolor sit amet';
+        $dataURI = new DataURI\Data($dataString);
+        $dataURI->setBinaryData(true);
+        $this->assertTrue($dataURI->isBinaryData());
     }
-    catch (DataURI\Exception\FileNotFound $e)
+
+    public function testInit()
     {
-      
+        $dataString = 'Lorem ipsum dolor sit amet';
+        $dataURI = new DataURI\Data($dataString);
+        $parameters = $dataURI->getParameters();
+        $this->assertTrue(array_key_exists('charset', $parameters));
+        $this->assertEquals('US-ASCII', $parameters['charset']);
+
+        $this->assertEquals('text/plain', $dataURI->getMimeType());
     }
-  }
 
-  public function testWrite()
-  {
-    $filename = __DIR__ . '/test';
-    $this->createEmptyFile($filename);
-    $dataString = 'hello world';
-    $dataURI = new DataURI\Data($dataString);
-    $dataURI = DataURI\Data::buildFromFile($dataURI->write($filename));
-    $this->assertEquals($dataString, rawurldecode($dataURI->getData()));
-    unlink($filename);
-  }
+    public function testAddParameters()
+    {
+        $dataString = 'Lorem ipsum dolor sit amet';
+        $dataURI = new DataURI\Data($dataString);
+        $current = count($dataURI->getParameters());
+        $dataURI->addParameters('charset', 'iso-8859-7');
+        $this->assertEquals($current, count($dataURI->getParameters()));
+        $dataURI->addParameters('another-charset', 'iso-8859-7');
+        $this->assertGreaterThan($current, count($dataURI->getParameters()));
+        $this->assertTrue(array_key_exists('another-charset', $dataURI->getParameters()));
+    }
 
-  private function createEmptyFile($filename)
-  {
-    $handle = fopen($filename, 'x+');
-    fwrite($handle, '');
-    fclose($handle);
-  }
+    public function testBuildFromFile()
+    {
+        $file = __DIR__ . '/smile.png';
+        $dataURI = DataURI\Data::buildFromFile($file, true);
+        $this->assertInstanceOf('DataURI\Data', $dataURI);
+        $this->assertEquals('image/png', $dataURI->getMimeType());
+        $this->assertEquals(file_get_contents($file), base64_decode($dataURI->getData()));
+    }
 
+    /**
+     * @expectedException \DataURI\Exception\invalidData Exception
+     */
+    public function testFileNotFound()
+    {
+        $filename = __DIR__ . '/unknown-file';
+
+        $dataString = 'Lorem ipsum dolor sit amet';
+        $dataURI = new DataURI\Data($dataString);
+        $dataURI->write($filename);
+    }
+
+    public function testWrite()
+    {
+        $filename = __DIR__ . '/test';
+        $this->createEmptyFile($filename);
+        $dataString = 'hello world';
+        $dataURI = new DataURI\Data($dataString);
+        $dataURI = DataURI\Data::buildFromFile($dataURI->write($filename));
+        $this->assertEquals($dataString, rawurldecode($dataURI->getData()));
+        unlink($filename);
+    }
+
+    private function createEmptyFile($filename)
+    {
+        $handle = fopen($filename, 'x+');
+        fwrite($handle, '');
+        fclose($handle);
+    }
 }

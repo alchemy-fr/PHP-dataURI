@@ -18,20 +18,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
-
 /**
  *
  * @author      Nicolas Le Goff
  * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
-
-require __DIR__ . '/vendor/.composer/autoload.php';
-
-require_once __DIR__ . '/src/DataURI/Exception/FileExists.php';
-require_once __DIR__ . '/src/DataURI/Exception/FileNotFound.php';
-require_once __DIR__ . '/src/DataURI/Exception/InvalidData.php';
-require_once __DIR__ . '/src/DataURI/Exception/TooLongData.php';
-require_once __DIR__ . '/src/DataURI/Data.php';
-require_once __DIR__ . '/src/DataURI/Dumper.php';
-require_once __DIR__ . '/src/DataURI/Parser.php';
+require __DIR__ . '/vendor/autoload.php';
