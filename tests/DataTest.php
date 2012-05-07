@@ -119,7 +119,7 @@ class DataTest extends PHPUnit_Framework_TestCase
     $dataURI = DataURI\Data::buildFromFile($file, true);
     $this->assertInstanceOf('DataURI\Data', $dataURI);
     $this->assertEquals('image/png', $dataURI->getMimeType());
-    $this->assertEquals(file_get_contents($file), base64_decode($dataURI->getData()));
+    $this->assertEquals(file_get_contents($file), $dataURI->getData());
   }
 
   public function testFileNotFound()

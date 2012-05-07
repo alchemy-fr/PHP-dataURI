@@ -216,16 +216,6 @@ class Data
 
     $data = file_get_contents($file->getPathname());
     
-    if ($binaryData && ! $data = base64_encode($data))
-    {
-      throw new InvalidData('base64 encoding failed');
-    }
-    
-    if(!$binaryData)
-    {
-      $data = rawurlencode($data);
-    }
-    
     $dataURI = new static($data, $file->getMimeType(), array(), $len);
     
     $dataURI->setBinaryData($binaryData);
