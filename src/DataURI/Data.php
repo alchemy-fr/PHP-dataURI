@@ -111,6 +111,7 @@ class Data
         $this->data = $data;
         $this->mimeType = $mimeType;
         $this->parameters = $parameters;
+        $this->isBinaryData = strpos($mimeType, 'text/') !== 0;
 
         $this->init($lengthMode, $strict);
     }
@@ -203,12 +204,11 @@ class Data
      * Get a new instance of DataUri\Data from a file
      *
      * @param string    $file           Path to the located file
-     * @param boolean   $isBinaryData   File contents is binary
      * @param boolean   $strict         Use strict mode
      * @param int       $lengthMode     The length mode
      * @return \DataURI\Data
      */
-    public static function buildFromFile($file, $isBinaryData = false, $strict = false, $lengthMode = Data::TAGLEN)
+    public static function buildFromFile($file, $strict = false, $lengthMode = Data::TAGLEN)
     {
         if ( ! $file instanceof SymfoFile) {
             $file = new SymfoFile($file);
@@ -216,17 +216,7 @@ class Data
 
         $data = file_get_contents($file->getPathname());
 
-        if ($isBinaryData && ! $data = base64_encode($data)) {
-            throw new InvalidDataException('base64 encoding failed');
-        }
-
-        if ( ! $isBinaryData) {
-            $data = rawurlencode($data);
-        }
-
         $dataURI = new static($data, $file->getMimeType(), array(), $strict, $lengthMode);
-
-        $dataURI->setBinaryData($isBinaryData);
 
         return $dataURI;
     }

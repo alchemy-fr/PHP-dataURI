@@ -79,7 +79,7 @@ class DataTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($dataURI->getParameters()));
     }
 
-    public function testIsBase64Encoded()
+    public function testIsBinaryData()
     {
         $dataString = 'Lorem ipsum dolor sit amet';
         $dataURI = new DataURI\Data($dataString);
@@ -113,10 +113,10 @@ class DataTest extends PHPUnit_Framework_TestCase
     public function testBuildFromFile()
     {
         $file = __DIR__ . '/smile.png';
-        $dataURI = DataURI\Data::buildFromFile($file, true);
+        $dataURI = DataURI\Data::buildFromFile($file);
         $this->assertInstanceOf('DataURI\Data', $dataURI);
         $this->assertEquals('image/png', $dataURI->getMimeType());
-        $this->assertEquals(file_get_contents($file), base64_decode($dataURI->getData()));
+        $this->assertEquals(file_get_contents($file), $dataURI->getData());
     }
 
     /**
@@ -138,12 +138,16 @@ class DataTest extends PHPUnit_Framework_TestCase
         $dataString = 'hello world';
         $dataURI = new DataURI\Data($dataString);
         $dataURI = DataURI\Data::buildFromFile($dataURI->write($filename));
-        $this->assertEquals($dataString, rawurldecode($dataURI->getData()));
+        $this->assertEquals($dataString, $dataURI->getData());
         unlink($filename);
     }
 
     private function createEmptyFile($filename)
     {
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
+
         $handle = fopen($filename, 'x+');
         fwrite($handle, '');
         fclose($handle);

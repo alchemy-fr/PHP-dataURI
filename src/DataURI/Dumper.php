@@ -51,11 +51,14 @@ class Dumper
             }
         }
 
-        $base64 = $dataURI->isBinaryData() ? sprintf(';%s', Data::BASE_64) : '';
+        $base64 = '';
 
-        $data = $dataURI->isBinaryData() ?
-            base64_encode($dataURI->getData()) :
-            rawurlencode($dataURI->getData());
+        if($dataURI->isBinaryData()){
+            $base64 = sprintf(';%s', Data::BASE_64);
+            $data = base64_encode($dataURI->getData());
+        }else{
+            $data = rawurlencode($dataURI->getData());
+        }
 
         return sprintf('data:%s%s%s,%s'
                 , $dataURI->getMimeType()
