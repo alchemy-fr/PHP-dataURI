@@ -11,10 +11,10 @@ data in-line in web pages as if they were external ressources.
 This feature is mainly used with HTML5 file API.
 
 This is supposed 100% RFC 2397 http://tools.ietf.org/html/rfc2397 compliant and ready for production.
- 
+
 If you ever find a bug, please fill a ticket or send a pull request.
 
-##License 
+##License
 
 MIT http://opensource.org/licenses/MIT
 
@@ -53,9 +53,8 @@ Data Object From File
 
 ```php
 <?php
-$dataObject = DataURI\Data::buildFromFile("/path/to/my/image.png", true);
-//second argument is for encoding binaryData in base64
-echo DaraURI\Dumper::dump($dataObject); 
+$dataObject = DataURI\Data::buildFromFile("/path/to/my/image.png");
+echo DaraURI\Dumper::dump($dataObject);
 //print data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...+S/EAAAAASUVORK5CYII=
 
 ```
