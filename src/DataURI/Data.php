@@ -114,7 +114,7 @@ class Data
 
         $this->init($lengthMode, $strict);
 
-        $this->isBinaryData = strpos($mimeType, 'text/') !== 0;
+        $this->isBinaryData = strpos($this->mimeType, 'text/') !== 0;
     }
 
     /**
