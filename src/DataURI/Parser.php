@@ -21,8 +21,9 @@
 
 namespace DataURI;
 
-use DataURI\Exception\InvalidDataException,
-    DataURI\Data;
+use DataURI\Exception\InvalidDataException;
+use DataURI\Exception\InvalidArgumentException;
+use DataURI\Data;
 
 /**
  * @author      Nicolas Le Goff
@@ -52,7 +53,7 @@ class Parser
         $dataParams = $matches = array();
 
         if ( ! preg_match(self::DATA_URI_REGEXP, $dataUri, $matches)) {
-            throw new \InvalidArgumentException('Could not parse the URL scheme');
+            throw new InvalidArgumentException('Could not parse the URL scheme');
         }
 
         $base64 = false;
@@ -73,7 +74,7 @@ class Parser
         }
 
         if (($base64 && ! $rawData = base64_decode($rawData, $strict))) {
-            throw new InvalidDataException('base64 encoding failed');
+            throw new InvalidDataException('base64 decoding failed');
         }
 
         if ( ! $base64) {
