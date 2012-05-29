@@ -21,11 +21,11 @@
 
 namespace DataURI;
 
-use DataURI\Exception\FileExistsException,
-    DataURI\Exception\FileNotFoundException,
-    DataURI\Exception\TooLongDataException,
-    DataURI\Exception\InvalidDataException;
+use DataURI\Exception\FileExistsException;
+use DataURI\Exception\FileNotFoundException;
+use DataURI\Exception\TooLongDataException;
 use Symfony\Component\HttpFoundation\File\File as SymfoFile;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException as SymfoFileException;
 
 /**
  * DataURI\Data object is a representation of an url which embed (small)
@@ -188,7 +188,6 @@ class Data
      * @return \Symfony\Component\HttpFoundation\File\File
      *
      * @throws FileNotFoundException
-     * @throws FileExistsException
      */
     public function write($pathfile, $override = false)
     {
@@ -212,7 +211,11 @@ class Data
     public static function buildFromFile($file, $strict = false, $lengthMode = Data::TAGLEN)
     {
         if ( ! $file instanceof SymfoFile) {
-            $file = new SymfoFile($file);
+            try {
+                $file = new SymfoFile($file);
+            } catch (SymfoFileException $e){
+                throw new FileNotFoundException(sprintf('%s file does not exist', $file));
+            }
         }
 
         $data = file_get_contents($file->getPathname());
