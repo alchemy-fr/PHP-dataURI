@@ -41,7 +41,7 @@ class DataTest extends PHPUnit_Framework_TestCase
             $dataURI = new DataURI\Data($string, null, array(), true);
             $this->fail('An exception should have beeen raised');
         } catch (DataURI\Exception\TooLongDataException $e) {
-
+            $this->assertEquals(DataURI\Data::ATTS_TAG_LIMIT + 1, $e->getLength());
         }
 
         $dataURI = new DataURI\Data($string);
@@ -129,6 +129,16 @@ class DataTest extends PHPUnit_Framework_TestCase
         $dataString = 'Lorem ipsum dolor sit amet';
         $dataURI = new DataURI\Data($dataString);
         $dataURI->write($filename);
+    }
+
+        /**
+     * @expectedException \DataURI\Exception\FileNotFoundException
+     */
+    public function testFileNotFoundFromFile()
+    {
+        $filename = __DIR__ . '/unknown-file';
+
+        DataURI\Data::buildFromFile($filename);
     }
 
     public function testWrite()
