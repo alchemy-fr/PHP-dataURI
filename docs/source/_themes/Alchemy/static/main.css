@@ -8,6 +8,8 @@ html, body {
 
 .hero-unit{
      background-color:#8AB4BF;
+     background: url('dataURI.png') #8AB4BF no-repeat -120px -60px;
+     padding-left: 170px;
  }
 
 #searchbox{
