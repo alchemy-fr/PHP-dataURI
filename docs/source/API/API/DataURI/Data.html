@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>DataURI\Data | PHP-XPDF API</title>
+                    <link rel="stylesheet" type="text/css" href="../stylesheet.css">
+                            </head>
+        <body id="class">
+            <div class="header">
+        <ul>
+            <li><a href="../classes.html">Classes</a></li>
+                            <li><a href="../namespaces.html">Namespaces</a></li>
+                        <li><a href="../interfaces.html">Interfaces</a></li>
+            <li><a href="../doc-index.html">Index</a></li>
+            
+        </ul>
+
+        <div id="title">PHP-XPDF API</div>
+
+            <div class="type">Class</div>
+    <h1><a href="../DataURI.html">DataURI</a>\Data</h1>
+    </div>
+        <div class="content">
+                <p>class    <strong>Data</strong></p>
+
+            <div class="description">
+            <p>DataURI\Data object is a representation of an url which embed (small) media type data directly inline.</p>
+            <p>It owns three main properties :<br />
+ the data, the type of the media and some optional parameters</p>
+        </div>
+    
+            <h2>Constants</h2>
+
+            <table>
+                    <tr>
+                <td>LITLEN</td>
+                <td class="last">
+                    <p><em>The LITLEN (1024) limits the number of characters which can appear in a single attribute value literal</em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>ATTSPLEN</td>
+                <td class="last">
+                    <p><em>The ATTSPLEN (2100) limits the sum of all lengths of all attribute value specifications which appear in a tag</em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>TAGLEN</td>
+                <td class="last">
+                    <p><em>The TAGLEN (2100) limits the overall length of a tag</em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>ATTS_TAG_LIMIT</td>
+                <td class="last">
+                    <p><em>ATTS_TAG_LIMIT is the length limit allowed for TAGLEN &amp; ATTSPLEN DataURi</em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>LIT_LIMIT</td>
+                <td class="last">
+                    <p><em>LIT_LIMIT is the length limit allowed for LITLEN DataURi</em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>BASE_64</td>
+                <td class="last">
+                    <p><em>Base64 encode prefix</em></p>
+                    <p></p>
+                </td>
+            </tr>
+            </table>
+
+    
+    
+            <h2>Methods</h2>
+
+            <table>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method___construct">__construct</a>(string $data, string $mimeType = null, array $parameters = array(), boolean $strict = false, int $lengthMode = self::TAGLEN)
+                    <p>A DataURI Object which by default has a &#039;text/plain&#039; media type and a &#039;charset=US-ASCII&#039; as optionnal parameter</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    string
+                </td>
+                <td class="last">
+                    <a href="#method_getData">getData</a>()
+                    <p>File Datas</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    string
+                </td>
+                <td class="last">
+                    <a href="#method_getMimeType">getMimeType</a>()
+                    <p>Media type</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    string
+                </td>
+                <td class="last">
+                    <a href="#method_getParameters">getParameters</a>()
+                    <p>File parameters</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    boolean
+                </td>
+                <td class="last">
+                    <a href="#method_isBinaryData">isBinaryData</a>()
+                    <p>Data is binary data</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="../DataURI/Data.html"><abbr title="DataURI\Data">Data</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_setBinaryData">setBinaryData</a>(boolean $boolean)
+                    <p>Set if Data is binary data</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <abbr title="DataURI\File">File</abbr>
+                </td>
+                <td class="last">
+                    <a href="#method_addParameters">addParameters</a>(string $paramName, string $paramValue)
+                    <p>Add a custom parameters to the DataURi</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <abbr title="Symfony\Component\HttpFoundation\File\File">File</abbr>
+                </td>
+                <td class="last">
+                    <a href="#method_write">write</a>(string $pathfile, Boolean $override = false)
+                    <p>Write datas to the specified file</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    static&nbsp;<a href="../DataURI/Data.html"><abbr title="DataURI\Data">Data</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_buildFromFile">buildFromFile</a>(string $file, boolean $strict = false, int $lengthMode = Data::TAGLEN)
+                    <p>Get a new instance of DataUri\Data from a file</p>
+                </td>
+                <td></td>
+            </tr>
+            </table>
+
+
+        <h2>Details</h2>
+
+                        <h3 id="method___construct">
+        <div class="location">at line 109</div>
+        <code>            public            
+    <strong>__construct</strong>(string $data, string $mimeType = null, array $parameters = array(), boolean $strict = false, int $lengthMode = self::TAGLEN)</code>
+    </h3>
+    <div class="details">
+        <p>A DataURI Object which by default has a &#039;text/plain&#039; media type and a &#039;charset=US-ASCII&#039; as optionnal parameter</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>string</td>
+                <td>$data</td>
+                <td>Data to include as &quot;immediate&quot; data</td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$mimeType</td>
+                <td>Mime type of media</td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$parameters</td>
+                <td>Array of optionnal parameters</td>
+            </tr>
+                    <tr>
+                <td>boolean</td>
+                <td>$strict</td>
+                <td>Check length of datas</td>
+            </tr>
+                    <tr>
+                <td>int</td>
+                <td>$lengthMode</td>
+                <td>Define Length of datas</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getData">
+        <div class="location">at line 124</div>
+        <code>            public            string
+    <strong>getData</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>File Datas</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getMimeType">
+        <div class="location">at line 133</div>
+        <code>            public            string
+    <strong>getMimeType</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Media type</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getParameters">
+        <div class="location">at line 142</div>
+        <code>            public            string
+    <strong>getParameters</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>File parameters</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_isBinaryData">
+        <div class="location">at line 151</div>
+        <code>            public            boolean
+    <strong>isBinaryData</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Data is binary data</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>boolean</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_setBinaryData">
+        <div class="location">at line 162</div>
+        <code>            public            <a href="../DataURI/Data.html"><abbr title="DataURI\Data">Data</abbr></a>
+    <strong>setBinaryData</strong>(boolean $boolean)</code>
+    </h3>
+    <div class="details">
+        <p>Set if Data is binary data</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>boolean</td>
+                <td>$boolean</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../DataURI/Data.html"><abbr title="DataURI\Data">Data</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_addParameters">
+        <div class="location">at line 175</div>
+        <code>            public            <abbr title="DataURI\File">File</abbr>
+    <strong>addParameters</strong>(string $paramName, string $paramValue)</code>
+    </h3>
+    <div class="details">
+        <p>Add a custom parameters to the DataURi</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>string</td>
+                <td>$paramName</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$paramValue</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><abbr title="DataURI\File">File</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_write">
+        <div class="location">at line 192</div>
+        <code>            public            <abbr title="Symfony\Component\HttpFoundation\File\File">File</abbr>
+    <strong>write</strong>(string $pathfile, Boolean $override = false)</code>
+    </h3>
+    <div class="details">
+        <p>Write datas to the specified file</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>string</td>
+                <td>$pathfile</td>
+                <td>File to be written</td>
+            </tr>
+                    <tr>
+                <td>Boolean</td>
+                <td>$override</td>
+                <td>Override existing file</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><abbr title="Symfony\Component\HttpFoundation\File\File">File</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="FileNotFoundException">FileNotFoundException</abbr></td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_buildFromFile">
+        <div class="location">at line 211</div>
+        <code>        static    public            <a href="../DataURI/Data.html"><abbr title="DataURI\Data">Data</abbr></a>
+    <strong>buildFromFile</strong>(string $file, boolean $strict = false, int $lengthMode = Data::TAGLEN)</code>
+    </h3>
+    <div class="details">
+        <p>Get a new instance of DataUri\Data from a file</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>string</td>
+                <td>$file</td>
+                <td>Path to the located file</td>
+            </tr>
+                    <tr>
+                <td>boolean</td>
+                <td>$strict</td>
+                <td>Use strict mode</td>
+            </tr>
+                    <tr>
+                <td>int</td>
+                <td>$lengthMode</td>
+                <td>The length mode</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../DataURI/Data.html"><abbr title="DataURI\Data">Data</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+    
+            </div>
+            <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/" target="_top">Sami, the API Documentation Generator</a>.
+    </div>
+    </body>
+</html>
