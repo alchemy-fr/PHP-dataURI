@@ -18,7 +18,7 @@ We rely on `composer <http://getcomposer.org/>`_ to use this library. If you do
 no still use composer for your project, you can start with this ``composer.json``
 at the root of your project:
 
-.. code-block:: bash
+.. code-block:: json
 
     {
         "require": {
@@ -128,13 +128,6 @@ If you experience an issue, please report it in our
 `issue tracker <https://github.com/alchemy-fr/PHP-dataURI/issues>`_. Before
 reporting an issue, please be sure that it is not already reported by browsing
 open issues.
-
-Ask for a feature
------------------
-
-We would be glad you ask for a feature ! Feel free to add a feature request in
-the `issues manager <https://github.com/alchemy-fr/PHP-dataURI/issues>`_ on GitHub !
-
 
 Contribute
 ----------
