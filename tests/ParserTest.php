@@ -36,7 +36,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
             "data:image/png;base64," . $b64,
             "data:image/png;paramName=paramValue;base64," . $b64,
             "data:text/plain;charset=utf-8,%23%24%25",
-            "data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local"
+            "data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local",
+			"data:image/svg+xml;base64," . $b64,
+			"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," . $b64
         );
 
         $dataURI = DataURI\Parser::parse($tests[0]);
