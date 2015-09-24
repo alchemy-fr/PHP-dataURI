@@ -89,7 +89,7 @@ Dumper
     // Add some parameters
     $dataObject->addParameters('charset' => 'utf-8');
 
-    echo DaraURI\Dumper::dump($dataObject);
+    echo DataURI\Dumper::dump($dataObject);
     // Output data:text/plain;charset=utf-8,%23%24%25
 
 Dump URI from file
@@ -101,7 +101,19 @@ Dump URI from file
     use DataURI;
 
     $dataObject = DataURI\Data::buildFromFile("/path/to/my/image.png");
-    echo DaraURI\Dumper::dump($dataObject);
+    echo DataURI\Dumper::dump($dataObject);
+    // Output data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...+S/EAAAAASUVORK5CYII=
+
+Dump URI from url
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: php
+
+    <?php
+    use DataURI;
+
+    $dataObject = DataURI\Data::buildFromUrl("http://www.example.org/path/to/my/image.png");
+    echo DataURI\Dumper::dump($dataObject);
     // Output data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...+S/EAAAAASUVORK5CYII=
 
 Handling Exceptions
@@ -110,7 +122,7 @@ Handling Exceptions
 PHP-dataURI throws 4 different types of exception :
 
 - ``\DataURI\Exception\FileNotFoundException`` is thrown when an invalid
-  pathfile is supplied
+  pathfile is supplied or when we don't get a valid response from URL
 - ``\DataURI\Exception\InvalidDataException`` is thrown when raw data could not
   be decoded
 - ``\DataURI\Exception\TooLongDataException`` is thrown when provided data is too
