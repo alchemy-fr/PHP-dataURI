@@ -226,6 +226,32 @@ class Data
     }
 
     /**
+     * Get a new instance of DataUri\Data from a remote file
+     *
+     * @param string    $url            Path to the remote file
+     * @param boolean   $strict         Use strict mode
+     * @param int       $lengthMode     The length mode
+     * @return \DataURI\Data
+     */
+    public static function buildFromUrl($url, $strict = false, $lengthMode = Data::TAGLEN)
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $data = curl_exec($ch);
+
+        if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
+            throw new FileNotFoundException(sprintf('%s file does not exist or the remote server does not respond', $url));
+        }
+
+        $mimeType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        curl_close($ch);
+
+        $dataURI = new static($data, $mimeType, array(), $strict, $lengthMode);
+
+        return $dataURI;
+    }
+
+    /**
      * Contructor initialization
 
      *

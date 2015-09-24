@@ -119,6 +119,15 @@ class DataTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(file_get_contents($file), $dataURI->getData());
     }
 
+    public function testBuildFromUrl()
+    {
+        $url = 'http://www.alchemy.fr/images/header_03.png';
+        $dataURI = DataURI\Data::buildFromUrl($url);
+        $this->assertInstanceOf('DataURI\Data', $dataURI);
+        $this->assertEquals('image/png', $dataURI->getMimeType());
+        $this->assertEquals(file_get_contents($url), $dataURI->getData());
+    }
+
     /**
      * @expectedException \DataURI\Exception\FileNotFoundException
      */
