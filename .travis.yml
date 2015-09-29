@@ -1,5 +1,7 @@
 language: php
 
+sudo: false
+
 before_script:
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
