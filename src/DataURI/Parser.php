@@ -44,8 +44,9 @@ class Parser
      * Parse a data URI and return a DataUri\Data
      *
      * @param string $dataUri A data URI
-     * @return \DataUri\Data
-     * @throws InvalidArgumentException
+     * @param int $len
+     * @param bool $strict
+     * @return Data
      * @throws InvalidDataException
      */
     public static function parse($dataUri, $len = Data::TAGLEN, $strict = false)

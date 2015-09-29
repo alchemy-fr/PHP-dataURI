@@ -21,11 +21,10 @@
 
 namespace DataURI;
 
-use DataURI\Exception\FileExistsException;
 use DataURI\Exception\FileNotFoundException;
 use DataURI\Exception\TooLongDataException;
-use Symfony\Component\HttpFoundation\File\File as SymfoFile;
-use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException as SymfoFileException;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException as SymfonyFileException;
 
 /**
  * DataURI\Data object is a representation of an url which embed (small)
@@ -98,16 +97,21 @@ class Data
 
     /**
      * A DataURI Object which by default has a 'text/plain'
-     * media type and a 'charset=US-ASCII' as optionnal parameter
+     * media type and a 'charset=US-ASCII' as optional parameter
      *
      * @param string    $data       Data to include as "immediate" data
      * @param string    $mimeType   Mime type of media
-     * @param array     $parameters Array of optionnal parameters
-     * @param boolean   $strict     Check length of datas
-     * @param int       $lengthMode Define Length of datas
+     * @param array     $parameters Array of optional parameters
+     * @param boolean   $strict     Check length of data
+     * @param int       $lengthMode Define Length of data
      */
-    public function __construct($data, $mimeType = null, Array $parameters = array(), $strict = false, $lengthMode = self::TAGLEN)
-    {
+    public function __construct(
+        $data,
+        $mimeType = null,
+        array $parameters = array(),
+        $strict = false,
+        $lengthMode = self::TAGLEN
+    ) {
         $this->data = $data;
         $this->mimeType = $mimeType;
         $this->parameters = $parameters;
@@ -118,7 +122,7 @@ class Data
     }
 
     /**
-     * File Datas
+     * File contents
      * @return string
      */
     public function getData()
@@ -137,7 +141,7 @@ class Data
 
     /**
      * File parameters
-     * @return string
+     * @return mixed[]
      */
     public function getParameters()
     {
@@ -157,11 +161,12 @@ class Data
      * Set if Data is binary data
      *
      * @param boolean $boolean
-     * @return \DataURI\Data
+     * @return $this
      */
     public function setBinaryData($boolean)
     {
         $this->isBinaryData = (boolean) $boolean;
+
         return $this;
     }
 
@@ -170,7 +175,7 @@ class Data
      *
      * @param string $paramName
      * @param string $paramValue
-     * @return \DataURI\File
+     * @return $this
      */
     public function addParameters($paramName, $paramValue)
     {
@@ -182,38 +187,39 @@ class Data
     /**
      * Write datas to the specified file
      *
-     * @param string    $pathfile   File to be written
-     * @param Boolean   $override   Override existing file
+     * @param string    $filePath   File to be written
+     * @param Boolean   $overwrite   Override existing file
      *
      * @return \Symfony\Component\HttpFoundation\File\File
      *
      * @throws FileNotFoundException
      */
-    public function write($pathfile, $override = false)
+    public function write($filePath, $overwrite = false)
     {
-        if ( ! file_exists($pathfile)) {
-            throw new FileNotFoundException(sprintf('%s file does not exist', $pathfile));
+        if ( ! file_exists($filePath)) {
+            throw new FileNotFoundException(sprintf('%s file does not exist', $filePath));
         }
 
-        file_put_contents($pathfile, $this->data, $override ? 0 : FILE_APPEND);
+        file_put_contents($filePath, $this->data, $overwrite ? 0 : FILE_APPEND);
 
-        return new SymfoFile($pathfile);
+        return new File($filePath);
     }
 
     /**
      * Get a new instance of DataUri\Data from a file
      *
-     * @param string    $file           Path to the located file
-     * @param boolean   $strict         Use strict mode
-     * @param int       $lengthMode     The length mode
-     * @return \DataURI\Data
+     * @param string $file Path to the located file
+     * @param boolean $strict Use strict mode
+     * @param int $lengthMode The length mode
+     * @return Data
+     * @throws FileNotFoundException
      */
     public static function buildFromFile($file, $strict = false, $lengthMode = Data::TAGLEN)
     {
-        if ( ! $file instanceof SymfoFile) {
+        if ( ! $file instanceof File) {
             try {
-                $file = new SymfoFile($file);
-            } catch (SymfoFileException $e){
+                $file = new File($file);
+            } catch (SymfonyFileException $e){
                 throw new FileNotFoundException(sprintf('%s file does not exist', $file));
             }
         }
@@ -228,18 +234,24 @@ class Data
     /**
      * Get a new instance of DataUri\Data from a remote file
      *
-     * @param string    $url            Path to the remote file
-     * @param boolean   $strict         Use strict mode
-     * @param int       $lengthMode     The length mode
-     * @return \DataURI\Data
+     * @param string $url Path to the remote file
+     * @param boolean $strict Use strict mode
+     * @param int $lengthMode The length mode
+     * @return Data
+     * @throws FileNotFoundException
      */
     public static function buildFromUrl($url, $strict = false, $lengthMode = Data::TAGLEN)
     {
+        if (! extension_loaded('curl')) {
+            throw new \RuntimeException('This method requires the CURL extension.');
+        }
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $data = curl_exec($ch);
 
         if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
+            curl_close($ch);
             throw new FileNotFoundException(sprintf('%s file does not exist or the remote server does not respond', $url));
         }
 
@@ -252,7 +264,7 @@ class Data
     }
 
     /**
-     * Contructor initialization
+     * Constructor initialization
 
      *
      * @param int       $lengthMode     Max allowed data length
