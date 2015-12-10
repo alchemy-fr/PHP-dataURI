@@ -4,19 +4,22 @@
   "description": "PHP DataURI component",
   "keywords": ["data-uri", "data", "URI"],
   "license": "MIT",
-  "authors": [
-  {
+  "authors": [{
+    "name": "Alchemy",
+    "email": "info@alchemy.fr",
+    "homepage": "http://www.alchemy.fr"
+  }, {
     "name": "nlegoff",
     "email": "legoff.n@gmail.com"
-  }
-  ],
+  }],
   "require": {
-    "php"                     : ">=5.3.2",
-    "symfony/http-foundation" : "~2.0|~3.0"
+    "php": ">=5.3.2",
+    "symfony/http-foundation": "~2.0|~3.0"
   },
   "require-dev": {
-    "sami/sami"               : "dev-master",
-    "ext-curl"                : "*"
+    "sami/sami": "dev-master",
+    "ext-curl": "*",
+    "phpunit/phpunit": "^4.0|^5.0"
   },
   "autoload": {
     "psr-0": {
