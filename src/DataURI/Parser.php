@@ -48,6 +48,7 @@ class Parser
      * @param bool $strict
      * @return Data
      * @throws InvalidDataException
+     * @throws InvalidArgumentException
      */
     public static function parse($dataUri, $len = Data::TAGLEN, $strict = false)
     {
