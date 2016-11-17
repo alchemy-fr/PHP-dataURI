@@ -58,7 +58,10 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($dataURI->isBinaryData());
         $this->assertEquals('#$%', $dataURI->getData());
         $this->assertEquals(1, count($dataURI->getParameters()));
-    }
+
+        $dataURI = DataURI\Parser::parse($tests[4]);
+        $this->assertEquals('image/svg+xml', $dataURI->getMimeType());
+}
 
     /**
      * @expectedException \DataURI\Exception\InvalidDataException
