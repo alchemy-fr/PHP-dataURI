@@ -38,7 +38,7 @@ class Parser
      * offset #2 Parameters
      * offset #3 Datas
      */
-    const DATA_URI_REGEXP = '/data:([a-zA-Z-\/]+)([a-zA-Z0-9-_;=.+]+)?,(.*)/';
+    const DATA_URI_REGEXP = '/data:([a-zA-Z-\/+]+)([a-zA-Z0-9-_;=.+]+)?,(.*)/';
 
     /**
      * Parse a data URI and return a DataUri\Data
