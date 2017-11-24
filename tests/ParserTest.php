@@ -38,7 +38,8 @@ class ParserTest extends PHPUnit_Framework_TestCase
             "data:text/plain;charset=utf-8,%23%24%25",
             "data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local",
 			"data:image/svg+xml;base64," . $b64,
-			"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," . $b64
+			"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," . $b64,
+            "data:;base64," . $b64,
         );
 
         $dataURI = DataURI\Parser::parse($tests[0]);
@@ -61,6 +62,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
 
         $dataURI = DataURI\Parser::parse($tests[4]);
         $this->assertEquals('image/svg+xml', $dataURI->getMimeType());
+
+        $dataURI = DataURI\Parser::parse($tests[6]);
+        $this->assertEquals('text/plain', $dataURI->getMimeType());
 }
 
     /**
