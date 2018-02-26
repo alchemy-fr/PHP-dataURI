@@ -121,7 +121,7 @@ class DataTest extends PHPUnit_Framework_TestCase
 
     public function testBuildFromUrl()
     {
-        $url = 'http://via.placeholder.com/350x150';
+        $url = 'http://via.placeholder.com/350x150.png';
         $dataURI = DataURI\Data::buildFromUrl($url);
         $this->assertInstanceOf('DataURI\Data', $dataURI);
         $this->assertEquals('image/png', $dataURI->getMimeType());
