@@ -1,7 +1,7 @@
 CHANGELOG
 ---------
 
-- **0.2.4 (2017-11-24)**
+- **0.2.5 (2018-02-27)**
 
     - Support parsing of datauri's without mediatype.
 
