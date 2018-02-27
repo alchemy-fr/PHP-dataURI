@@ -1,5 +1,6 @@
 {
   "name": "data-uri/data-uri",
+  "version": "0.2.5",
   "type": "library",
   "description": "PHP DataURI component",
   "keywords": ["data-uri", "data", "URI"],
