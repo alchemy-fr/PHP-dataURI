@@ -19,13 +19,18 @@
  * IN THE SOFTWARE.
  */
 
+namespace DataURI\Tests;
+
+use DataURI\Parser;
+use PHPUnit\Framework\TestCase;
+
 /**
  *
  * @author      Nicolas Le Goff
  * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
-class ParserTest extends PHPUnit_Framework_TestCase
+class ParserTest extends TestCase
 {
 
     public function testParse()
@@ -42,28 +47,28 @@ class ParserTest extends PHPUnit_Framework_TestCase
             "data:;base64," . $b64,
         );
 
-        $dataURI = DataURI\Parser::parse($tests[0]);
+        $dataURI = Parser::parse($tests[0]);
         $this->assertEquals('image/png', $dataURI->getMimeType());
         $this->assertTrue($dataURI->isBinaryData());
-        $this->assertTrue(is_string($dataURI->getData()));
+        $this->assertInternalType('string', $dataURI->getData());
         $this->assertEquals(0, count($dataURI->getParameters()));
 
-        $dataURI = DataURI\Parser::parse($tests[1]);
+        $dataURI = Parser::parse($tests[1]);
         $this->assertEquals('image/png', $dataURI->getMimeType());
         $this->assertTrue($dataURI->isBinaryData());
-        $this->assertTrue(is_string($dataURI->getData()));
+        $this->assertInternalType('string', $dataURI->getData());
         $this->assertEquals(1, count($dataURI->getParameters()));
 
-        $dataURI = DataURI\Parser::parse($tests[2]);
+        $dataURI = Parser::parse($tests[2]);
         $this->assertEquals('text/plain', $dataURI->getMimeType());
         $this->assertFalse($dataURI->isBinaryData());
         $this->assertEquals('#$%', $dataURI->getData());
         $this->assertEquals(1, count($dataURI->getParameters()));
 
-        $dataURI = DataURI\Parser::parse($tests[4]);
+        $dataURI = Parser::parse($tests[4]);
         $this->assertEquals('image/svg+xml', $dataURI->getMimeType());
 
-        $dataURI = DataURI\Parser::parse($tests[6]);
+        $dataURI = Parser::parse($tests[6]);
         $this->assertEquals('text/plain', $dataURI->getMimeType());
 }
 
@@ -73,7 +78,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     public function testInvalidDataException()
     {
         $invalidData = 'data:image/gif;base64,';
-        DataURI\Parser::parse($invalidData);
+        Parser::parse($invalidData);
     }
 
     /**
@@ -82,7 +87,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     public function testInvalidArgumentException()
     {
         $invalidData = 'lorem:image:test,datas';
-        DataURI\Parser::parse($invalidData);
+        Parser::parse($invalidData);
     }
 
     private function binaryToBase64($file)

@@ -21,8 +21,6 @@
 
 namespace DataURI;
 
-use DataUri\Data;
-
 /**
  *
  * @author      Nicolas Le Goff

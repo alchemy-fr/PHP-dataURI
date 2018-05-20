@@ -23,7 +23,6 @@ namespace DataURI;
 
 use DataURI\Exception\InvalidDataException;
 use DataURI\Exception\InvalidArgumentException;
-use DataURI\Data;
 
 /**
  * @author      Nicolas Le Goff
