@@ -63,6 +63,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $dataURI = DataURI\Parser::parse($tests[4]);
         $this->assertEquals('image/svg+xml', $dataURI->getMimeType());
 
+        $dataURI = DataURI\Parser::parse($tests[5]);
+        $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $dataURI->getMimeType());
+
         $dataURI = DataURI\Parser::parse($tests[6]);
         $this->assertEquals('text/plain', $dataURI->getMimeType());
 }
