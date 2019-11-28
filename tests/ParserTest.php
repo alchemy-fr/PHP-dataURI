@@ -68,7 +68,7 @@ class ParserTest extends TestCase
         $dataURI = Parser::parse($tests[4]);
         $this->assertEquals('image/svg+xml', $dataURI->getMimeType());
 
-        $dataURI = DataURI\Parser::parse($tests[5]);
+        $dataURI = Parser::parse($tests[5]);
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $dataURI->getMimeType());
 
         $dataURI = DataURI\Parser::parse($tests[6]);
