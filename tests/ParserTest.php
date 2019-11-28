@@ -71,7 +71,7 @@ class ParserTest extends TestCase
         $dataURI = Parser::parse($tests[5]);
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $dataURI->getMimeType());
 
-        $dataURI = DataURI\Parser::parse($tests[6]);
+        $dataURI = Parser::parse($tests[6]);
 
         $this->assertEquals('text/plain', $dataURI->getMimeType());
 }
