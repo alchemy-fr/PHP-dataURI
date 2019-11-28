@@ -19,37 +19,43 @@
  * IN THE SOFTWARE.
  */
 
+namespace DataURI\Tests;
+
+use DataURI\Data;
+use DataURI\Exception\TooLongDataException;
+use PHPUnit\Framework\TestCase;
+
 /**
  *
  * @author      Nicolas Le Goff
  * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
-class DataTest extends PHPUnit_Framework_TestCase
+class DataTest extends TestCase
 {
 
     public function testTooLongException()
     {
         $i = 0;
         $string = '';
-        while ($i < DataURI\Data::ATTS_TAG_LIMIT + 1) {
+        while ($i < Data::ATTS_TAG_LIMIT + 1) {
             $string .= 'x';
             $i ++;
         }
 
         try {
-            $dataURI = new DataURI\Data($string, null, array(), true);
+            $dataURI = new Data($string, null, array(), true);
             $this->fail('An exception should have beeen raised');
-        } catch (DataURI\Exception\TooLongDataException $e) {
-            $this->assertEquals(DataURI\Data::ATTS_TAG_LIMIT + 1, $e->getLength());
+        } catch (TooLongDataException $e) {
+            $this->assertEquals(Data::ATTS_TAG_LIMIT + 1, $e->getLength());
         }
 
-        $dataURI = new DataURI\Data($string);
+        $dataURI = new Data($string);
 
         try {
-            $dataURI = new DataURI\Data($string, null, array(), true, DataURI\Data::LITLEN);
+            $dataURI = new Data($string, null, array(), true, Data::LITLEN);
             $this->fail('An exception should have beeen raised');
-        } catch (DataURI\Exception\TooLongDataException $e) {
+        } catch (TooLongDataException $e) {
 
         }
     }
@@ -57,7 +63,7 @@ class DataTest extends PHPUnit_Framework_TestCase
     public function testGetData()
     {
         $dataString = 'Lorem ipsum dolor sit amet';
-        $dataURI = new DataURI\Data($dataString);
+        $dataURI = new Data($dataString);
         $this->assertEquals($dataString, $dataURI->getData());
     }
 
@@ -65,7 +71,7 @@ class DataTest extends PHPUnit_Framework_TestCase
     {
         $dataString = 'Lorem ipsum dolor sit amet';
         $mimeType = 'text/plain';
-        $dataURI = new DataURI\Data($dataString, $mimeType);
+        $dataURI = new Data($dataString, $mimeType);
         $this->assertEquals($mimeType, $dataURI->getMimeType());
     }
 
@@ -74,15 +80,15 @@ class DataTest extends PHPUnit_Framework_TestCase
         $dataString = 'Lorem ipsum dolor sit amet';
         $mimeType = 'text/plain';
         $parameters = array('charset', 'utf-8');
-        $dataURI = new DataURI\Data($dataString, $mimeType, $parameters);
+        $dataURI = new Data($dataString, $mimeType, $parameters);
         $this->assertEquals($parameters, $dataURI->getParameters());
-        $this->assertTrue(is_array($dataURI->getParameters()));
+        $this->assertInternalType('array', $dataURI->getParameters());
     }
 
     public function testIsBinaryData()
     {
         $dataString = 'Lorem ipsum dolor sit amet';
-        $dataURI = new DataURI\Data($dataString);
+        $dataURI = new Data($dataString);
         $dataURI->setBinaryData(true);
         $this->assertTrue($dataURI->isBinaryData());
     }
@@ -90,39 +96,47 @@ class DataTest extends PHPUnit_Framework_TestCase
     public function testInit()
     {
         $dataString = 'Lorem ipsum dolor sit amet';
-        $dataURI = new DataURI\Data($dataString);
+        $dataURI = new Data($dataString);
         $parameters = $dataURI->getParameters();
-        $this->assertTrue(array_key_exists('charset', $parameters));
+        $this->assertArrayHasKey('charset', $parameters);
         $this->assertEquals('US-ASCII', $parameters['charset']);
-
         $this->assertEquals('text/plain', $dataURI->getMimeType());
     }
 
     public function testAddParameters()
     {
         $dataString = 'Lorem ipsum dolor sit amet';
-        $dataURI = new DataURI\Data($dataString);
+        $dataURI = new Data($dataString);
         $current = count($dataURI->getParameters());
         $dataURI->addParameters('charset', 'iso-8859-7');
         $this->assertEquals($current, count($dataURI->getParameters()));
         $dataURI->addParameters('another-charset', 'iso-8859-7');
         $this->assertGreaterThan($current, count($dataURI->getParameters()));
-        $this->assertTrue(array_key_exists('another-charset', $dataURI->getParameters()));
+        $this->assertArrayHasKey('another-charset', $dataURI->getParameters());
     }
 
     public function testBuildFromFile()
     {
         $file = __DIR__ . '/smile.png';
-        $dataURI = DataURI\Data::buildFromFile($file);
+        $dataURI = Data::buildFromFile($file);
         $this->assertInstanceOf('DataURI\Data', $dataURI);
         $this->assertEquals('image/png', $dataURI->getMimeType());
         $this->assertEquals(file_get_contents($file), $dataURI->getData());
     }
 
+    /**
+     * @expectedException DataURI\Exception\FileNotFoundException
+     */
+    public function testBuildFromUrlShouldThrowFileNotFoundException()
+    {
+        $url = 'http://via.placeholder.com/x150.png';
+        Data::buildFromUrl($url);
+    }
+
     public function testBuildFromUrl()
     {
         $url = 'http://via.placeholder.com/350x150.png';
-        $dataURI = DataURI\Data::buildFromUrl($url);
+        $dataURI = Data::buildFromUrl($url);
         $this->assertInstanceOf('DataURI\Data', $dataURI);
         $this->assertEquals('image/png', $dataURI->getMimeType());
         $this->assertEquals(file_get_contents($url), $dataURI->getData());
@@ -136,18 +150,18 @@ class DataTest extends PHPUnit_Framework_TestCase
         $filename = __DIR__ . '/unknown-file';
 
         $dataString = 'Lorem ipsum dolor sit amet';
-        $dataURI = new DataURI\Data($dataString);
+        $dataURI = new Data($dataString);
         $dataURI->write($filename);
     }
 
-        /**
+    /**
      * @expectedException \DataURI\Exception\FileNotFoundException
      */
     public function testFileNotFoundFromFile()
     {
         $filename = __DIR__ . '/unknown-file';
 
-        DataURI\Data::buildFromFile($filename);
+        Data::buildFromFile($filename);
     }
 
     public function testWrite()
@@ -155,8 +169,8 @@ class DataTest extends PHPUnit_Framework_TestCase
         $filename = __DIR__ . '/test';
         $this->createEmptyFile($filename);
         $dataString = 'hello world';
-        $dataURI = new DataURI\Data($dataString);
-        $dataURI = DataURI\Data::buildFromFile($dataURI->write($filename));
+        $dataURI = new Data($dataString);
+        $dataURI = Data::buildFromFile($dataURI->write($filename));
         $this->assertEquals($dataString, $dataURI->getData());
         unlink($filename);
     }

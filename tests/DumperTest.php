@@ -19,41 +19,45 @@
  * IN THE SOFTWARE.
  */
 
+namespace DataURI\Tests;
+
+use DataURI\Parser;
+use DataURI\Dumper;
+use PHPUnit\Framework\TestCase;
+
 /**
  *
  * @author      Nicolas Le Goff
  * @author      Phraseanet team
  * @license     http://opensource.org/licenses/MIT MIT
  */
-class DumperTest extends PHPUnit_Framework_TestCase
+class DumperTest extends TestCase
 {
 
-    public function testDump()
+    public function dumpDataProvider()
     {
         $b64 = $this->binaryToBase64(__DIR__ . '/smile.png');
 
-        $tests = array(
-            "data:image/png;base64," . $b64,
-            "data:image/png;paramName=paramValue;base64," . $b64,
-            "data:text/plain;charset=utf-8,%23%24%25",
-            "data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local"
+        return array(
+            array("data:image/png;base64," . $b64),
+            array("data:image/png;paramName=paramValue;base64," . $b64),
+            array("data:text/plain;charset=utf-8,%23%24%25")
         );
+    }
 
-        //#1
-        $dataURI = DataURI\Parser::parse($tests[0]);
-        $this->assertEquals($tests[0], DataURI\Dumper::dump($dataURI));
+    /**
+     * @dataProvider dumpDataProvider
+     */
+    public function testDump($expectedValue)
+    {
+        $dataURI = Parser::parse($expectedValue);
+        $this->assertEquals($expectedValue, Dumper::dump($dataURI));
+    }
 
-        //#2
-        $dataURI = DataURI\Parser::parse($tests[1]);
-        $this->assertEquals($tests[1], DataURI\Dumper::dump($dataURI));
-
-        //#3
-        $dataURI = DataURI\Parser::parse($tests[2]);
-        $this->assertEquals($tests[2], DataURI\Dumper::dump($dataURI));
-
-        //#4
-        $dataURI = DataURI\Parser::parse($tests[3]);
-        $this->assertEquals($tests[3], rawurldecode(DataURI\Dumper::dump($dataURI)));
+    public function testDumpOnRawUrlDecodeString()
+    {
+        $dataURI = Parser::parse("data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local");
+        $this->assertEquals("data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local", rawurldecode(Dumper::dump($dataURI)));
     }
 
     private function binaryToBase64($file)
