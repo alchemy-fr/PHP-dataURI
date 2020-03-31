@@ -24,6 +24,7 @@ namespace DataURI\Tests;
 use DataURI\Data;
 use DataURI\Exception\TooLongDataException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Process;
 
 /**
  *
@@ -33,6 +34,26 @@ use PHPUnit\Framework\TestCase;
  */
 class DataTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    private const LOCALHOST = 'localhost:8000';
+
+    /** @var Process */
+    private static $process;
+
+    public static function setUpBeforeClass()
+    {
+        self::$process = new Process(sprintf('exec php -S %s -t %s', static::LOCALHOST, __DIR__));
+        self::$process->start();
+
+        usleep(100000); //wait for server to get going
+    }
+
+    public static function tearDownAfterClass()
+    {
+        self::$process->stop();
+    }
 
     public function testTooLongException()
     {
@@ -131,7 +152,7 @@ class DataTest extends TestCase
     {
         $this->skipIfLocalWebServerDown();
 
-        $url = 'http://localhost:8000/unknown.png';
+        $url = sprintf('http://%s/unknown.png', static::LOCALHOST);
         Data::buildFromUrl($url);
     }
 
@@ -139,7 +160,7 @@ class DataTest extends TestCase
     {
         $this->skipIfLocalWebServerDown();
 
-        $url = 'http://localhost:8000/smile.png';
+        $url = sprintf('http://%s/smile.png', static::LOCALHOST);
         $dataURI = Data::buildFromUrl($url);
         $this->assertInstanceOf('DataURI\Data', $dataURI);
         $this->assertEquals('image/png', $dataURI->getMimeType());
@@ -192,7 +213,7 @@ class DataTest extends TestCase
 
     private function skipIfLocalWebServerDown()
     {
-        $url = 'http://localhost:8000/';
+        $url = sprintf('http://%s/', static::LOCALHOST);
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_NOBODY, true);
@@ -203,7 +224,7 @@ class DataTest extends TestCase
         curl_close($ch);
 
         if (0 === $httpcode) {
-            $this->markTestSkipped('The local web server is down. Run it with `php -S localhost:8000 -t tests/`.');
+            $this->markTestSkipped('The local web server is (still) down.');
         }
     }
 }
