@@ -15,7 +15,7 @@
   }],
   "require": {
     "php": ">=7.1.3",
-    "symfony/http-foundation": "~4.0"
+    "symfony/http-foundation": "~4.0|~5.0"
   },
   "require-dev": {
     "sami/sami": "^3.3",
