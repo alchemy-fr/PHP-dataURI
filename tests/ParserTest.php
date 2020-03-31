@@ -44,6 +44,7 @@ class ParserTest extends TestCase
             "data:application/vnd-xxx-query,select_vcount,fcol_from_fieldtable/local",
 			"data:image/svg+xml;base64," . $b64,
 			"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," . $b64,
+            "data:audio/mp3;base64," . $b64,
             "data:;base64," . $b64,
         );
 
@@ -72,6 +73,10 @@ class ParserTest extends TestCase
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $dataURI->getMimeType());
 
         $dataURI = Parser::parse($tests[6]);
+
+        $this->assertEquals('audio/mp3', $dataURI->getMimeType());
+
+        $dataURI = Parser::parse($tests[7]);
 
         $this->assertEquals('text/plain', $dataURI->getMimeType());
 }
