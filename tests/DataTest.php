@@ -129,13 +129,17 @@ class DataTest extends TestCase
      */
     public function testBuildFromUrlShouldThrowFileNotFoundException()
     {
-        $url = 'http://via.placeholder.com/x150.png';
+        $this->skipIfLocalWebServerDown();
+
+        $url = 'http://localhost:8000/unknown.png';
         Data::buildFromUrl($url);
     }
 
     public function testBuildFromUrl()
     {
-        $url = 'http://via.placeholder.com/350x150.png';
+        $this->skipIfLocalWebServerDown();
+
+        $url = 'http://localhost:8000/smile.png';
         $dataURI = Data::buildFromUrl($url);
         $this->assertInstanceOf('DataURI\Data', $dataURI);
         $this->assertEquals('image/png', $dataURI->getMimeType());
@@ -184,5 +188,22 @@ class DataTest extends TestCase
         $handle = fopen($filename, 'x+');
         fwrite($handle, '');
         fclose($handle);
+    }
+
+    private function skipIfLocalWebServerDown()
+    {
+        $url = 'http://localhost:8000/';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch, CURLOPT_TIMEOUT,10);
+        curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if (0 === $httpcode) {
+            $this->markTestSkipped('The local web server is down. Run it with `php -S localhost:8000 -t tests/`.');
+        }
     }
 }
